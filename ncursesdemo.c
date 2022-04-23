@@ -1,16 +1,25 @@
 #include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 
 void printing();
 void colouring();
 
 int main() {
+
+	int row, col;
+
+	char mesg[] = "Lorem ipsum";
+
 	initscr(); // starts ncurses
+	
+	getmaxyx(stdscr, row, col); //stores size of terminal window
+	mvprintw(row/2,(col-strlen(mesg)-14)/2,"%s",mesg);
 
-	addstr("\ntest print str\n");
-	refresh; // flush the buffer to the screen that ncurses outputs
+	//addstr("\ntest print str\n");
+	//refresh; // flush the buffer to the screen that ncurses outputs
 
-	printing();
+	//printing();
 	colouring();
 	
 	addstr("\npress any key to exit...");
@@ -36,7 +45,7 @@ void colouring() {
 	if (has_colors()) {
 		if (start_color() == OK) {
 			// takes a no. 1-64, foreground, background
-			init_pair(1, COLOR_YELLOW, COLOR_RED);
+			init_pair(1, COLOR_WHITE, COLOR_BLUE);
 
 			attrset(COLOR_PAIR(1));
 			addstr("Yellow and red\n\n");
