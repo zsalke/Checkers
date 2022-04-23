@@ -5,12 +5,23 @@
 #define EMPTY 0
 #define CHECK 1
 #define KING 2
-
+#define XCHECK 3
+#define XKING 4
 void printboard(int gamestate[]){
 	int count = 0;
 	
 	initscr();
+	if(has_colors() == FALSE){
+		endwin();
+		printf("Your terminal does not support color\n");
+		exit(1);
+	}	
 	start_color();
+	
+	//self
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	//opponent
+	init_pair(2, COLOR_RED, COLOR_BLACK);
 
 	int row,col;
 
@@ -21,9 +32,13 @@ void printboard(int gamestate[]){
 		//mvaddch(line, 2*count+1, '_');
 		mvaddch(line+1, 2*count, '|');
 		if (gamestate[i] == CHECK){
+			attron(COLOR_PAIR(1));
 			addch('c');
+			attroff(COLOR_PAIR(1));
 		} else if (gamestate[i] == KING) {
+			attron(COLOR_PAIR(1));
 			addch('C');
+			attroff(COLOR_PAIR(1));
 		} else {
 			addch(' ');
 		}
