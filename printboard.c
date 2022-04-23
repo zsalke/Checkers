@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 
+#define BOARD_SIZE 16
 #define EMPTY 0
 #define CHECK 1
 #define KING 2
@@ -28,8 +29,7 @@ void printboard(int gamestate[]){
 	getmaxyx(stdscr, row, col);
 
 	int line = 0;
-	for (int i = 0; i < 16; i++){
-		//mvaddch(line, 2*count+1, '_');
+	for (int i = 0; i < BOARD_SIZE; i++){
 		mvaddch(line+1, 2*count, '|');
 		if (gamestate[i] == CHECK){
 			attron(COLOR_PAIR(1));
@@ -53,13 +53,13 @@ void printboard(int gamestate[]){
 		count++;
 		if (count%8 == 0) {
 			addch('|');
-			line++;
+			mvhline(line, 0, '_',16);
+			line+=2;
 			count = 0;
 		}
 	}
 	
 	refresh();
-	//printf("\n");
 	getch();
 	endwin();
 }
