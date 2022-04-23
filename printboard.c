@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ncurses.h>
 
 #define EMPTY 0
 #define CHECK 1
@@ -7,29 +8,40 @@
 
 void printboard(int gamestate[]){
 	int count = 0;
-	//for (int i = 0; i < 8; i++) {
-	//	printf("__");
-	//}
-	printf("\n");
-	for (int i = 0; i <= 16; i++){
-		printf("|");
-		printf(" ");
-		if (gamestate[count] == CHECK){
-			printf("c");
-		} else if (gamestate[count] == KING) {
-			printf("C");
-		} 
-		printf(" ");
+	
+	initscr();
+	start_color();
+
+	int row,col;
+
+	getmaxyx(stdscr, row, col);
+
+	int line = 0;
+	for (int i = 0; i < 16; i++){
+		//mvaddch(line, 2*count+1, '_');
+		mvaddch(line+1, 2*count, '|');
+		if (gamestate[i] == CHECK){
+			addch('c');
+		} else if (gamestate[i] == KING) {
+			addch('C');
+		} else {
+			addch(' ');
+		}
 		count++;
 		if (count%8 == 0) {
-		printf("|\n");
-		
+			addch('|');
+			line++;
+			count = 0;
 		}
 	}
-	printf("\n");
+	
+	refresh();
+	//printf("\n");
+	getch();
+	endwin();
 }
 
 int main(){
-	int arr[16] = {1, 0, 1, 0, 2, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1};
+	int arr[17] = {1, 0, 1, 0, 2, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1};
 	printboard(arr);
 }
