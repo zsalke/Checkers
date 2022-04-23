@@ -39,6 +39,14 @@ void printboard(int gamestate[]){
 			attron(COLOR_PAIR(1));
 			addch('C');
 			attroff(COLOR_PAIR(1));
+		} else if (gamestate[i] == XCHECK) {
+			attron(COLOR_PAIR(2));
+			addch('c');
+			attroff(COLOR_PAIR(2));
+		} else if (gamestate[i] == XKING) {
+			attron(COLOR_PAIR(2));
+			addch('C');
+			attroff(COLOR_PAIR(2));
 		} else {
 			addch(' ');
 		}
@@ -57,6 +65,6 @@ void printboard(int gamestate[]){
 }
 
 int main(){
-	int arr[17] = {1, 0, 1, 0, 2, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1};
+	int arr[17] = {1, 0, 1, 0, 2, 0, 4, 0, 0, 1, 0, 1, 0, 3, 0, 3};
 	printboard(arr);
 }
