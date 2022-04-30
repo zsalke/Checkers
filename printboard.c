@@ -1,14 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ncurses.h>
+#include "board.h"
 
-#define BOARD_SIZE 16
-#define EMPTY 0
-#define CHECK 1
-#define KING 2
-#define XCHECK 3
-#define XKING 4
 void printboard(int gamestate[]){
+	
 	int count = 0;
 	
 	initscr();
@@ -53,8 +46,7 @@ void printboard(int gamestate[]){
 		count++;
 		if (count%8 == 0) {
 			addch('|');
-			mvhline(line, 0, '_',16);
-			line+=2;
+			line++;
 			count = 0;
 		}
 	}
@@ -64,7 +56,16 @@ void printboard(int gamestate[]){
 	endwin();
 }
 
-int main(){
-	int arr[17] = {1, 0, 1, 0, 2, 0, 4, 0, 0, 1, 0, 1, 0, 3, 0, 3};
-	printboard(arr);
-}
+/*int main(){
+	int board[BOARD_SIZE];
+	for (int i = 0; i < BOARD_SIZE; i++){
+		if (i%2 == 0){
+		 board[i] = 0;
+		} else if ((BOARD_SIZE/i) < 2) {
+		 board[i] = 1;
+		} else {
+		 board[i] = 3;
+		}
+	}
+	printboard(board);
+}*/
