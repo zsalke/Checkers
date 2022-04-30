@@ -1,25 +1,13 @@
 #include "board.h"
 
 void printboard(int gamestate[]){
-	
+	//screen should already be init in main
+
 	int count = 0;
 	
-	initscr();
-	if(has_colors() == FALSE){
-		endwin();
-		printf("Your terminal does not support color\n");
-		exit(1);
-	}	
-	start_color();
-	
-	//self
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	//opponent
 	init_pair(2, COLOR_RED, COLOR_BLACK);
-
-	int row,col;
-
-	getmaxyx(stdscr, row, col);
 
 	int line = 0;
 	for (int i = 0; i < BOARD_SIZE; i++){
@@ -52,8 +40,9 @@ void printboard(int gamestate[]){
 	}
 	
 	refresh();
-	getch();
-	endwin();
+	//getch();
+	//endwin();
+	//
 }
 
 /*int main(){

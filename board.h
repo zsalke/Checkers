@@ -8,3 +8,5 @@
 #define KING 2
 #define XCHECK 3
 #define XKING 4
+
+void printboard(int []);
