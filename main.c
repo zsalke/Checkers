@@ -33,7 +33,10 @@ int main() {
 		if (i%8 == 0){
                         line++;
                 }
-		if (line%2 == 0){
+		if ((line > 2) && (line < 5)) {
+			gamestate[i] = EMPTY;
+		}
+		else if (line%2 == 0){
 			if (i%2 == 0) {	
 				gamestate[i] = EMPTY;
 			} else {
