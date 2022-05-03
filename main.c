@@ -1,5 +1,7 @@
 #include "board.h"
 
+// put global variables here
+
 void step(int gamestate[]){
 	
 	printboard(gamestate);
@@ -13,6 +15,53 @@ void step(int gamestate[]){
 	//loop until completion
 	endwin();
 	exit(0);
+}
+
+struct gamestate {
+	int board[8][8];
+	int turn;
+	int score;
+};
+
+void initGame(struct board *b) {
+	(*b).turn = 0; // player go 1st for now
+	(*b).score = 0;
+
+	// initialize board
+	for(int i = 0; i < 8; i++) {
+		for(int j = 0; j < 8; j++) {
+			if (i <= 2) { // AI pieces
+				if ((i == 0 || i == 2)) {
+					if (j % 2 != 0) {
+						(*b).board[i][j] = _; //global var
+					} else {
+						(*b).board[i][j] = EMPTY; 
+					}
+				} else {
+					if (j % 2 == 0) {
+						(*b).board[i][j] = _; //global var
+					} else {
+						(*b).board[i][j] = EMPTY; 
+					}
+				}
+			}
+			if (i >= 5) { // player pieces
+				if ((i == 5 || i == 7)) {
+					if (j % 2 == 0) {
+						(*b).board[i][j] = _; //global var
+					} else {
+						(*b).board[i][j] = EMPTY; 
+					}
+				} else {
+					if (j % 2 != 0) {
+						(*b).board[i][j] = _; //global var
+					} else {
+						(*b).board[i][j] = EMPTY; 
+					}
+				}
+			}
+		}
+	}
 }
 
 int main() {
