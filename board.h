@@ -12,7 +12,8 @@
 #ifndef HEADER_FILE
 #define HEADER_FILE
 
-void printboard(int []);
+
+void printboard(int [8][8]);
 struct board;
 struct space;
 
