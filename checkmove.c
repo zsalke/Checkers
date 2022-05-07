@@ -6,6 +6,12 @@
 #include <stdio.h>
 #include "board.h"
 
+struct gamestate {
+        int board[8][8];
+        int turn;
+        int score;
+};
+
 struct Space {
 	int x;
 	int y;
@@ -92,16 +98,19 @@ struct Space *movediagonal(struct Space *pos, int dir) {
 }
 
 
+int printcaptures(struct gamestate *board_struct, struct Space *pos, player, piece_type) {
+	printf("TODO: implement captures");
+	return 0;
+}
 
 
 
 int printmoves(struct gamestate *board_struct, struct Space *pos, player) {
 // int printmoves(int player) {
-	int[8][8] board = board_struct->board;
 	int mych;
 	int myking;
 	int oppch;
-	int oppking
+	int oppking;
 	int forwardl;
 	int forwardr;
 	int backl;
@@ -127,64 +136,65 @@ int printmoves(struct gamestate *board_struct, struct Space *pos, player) {
 	}
 
 	struct Space testspace;
-	testspace.x = 3;
-	testspace.y = 2;
+	testspace.x = 4;
+	testspace.y = 5;
 	
 	printf("Tests\n");
 	printf("Move 26 up left: %d, %d\n", movediagonal(&testspace, 2)->x, movediagonal(&testspace, 2)->y);
 	/* printf("Move 6 down left: %d\n", movediagonal(6, 0));
 	printf("Try to move backwards from first: %d\n", movediagonal(2, 3));
-	printf("Try to move left off board: %d\n", movediagonal(13, 0));
+	printf("Try to move left off board_struct->board: %d\n", movediagonal(13, 0));
 	printf("Try to move forwards from last: %d\n", movediagonal(30, 1));
 	*/
-	int piece = board[pos->x][pos->y];
-	struct Space *new_sp = (struct Space*) malloc(sizeof(struct Space));
+
+	int piece = board_struct->board[pos->x][pos->y];
+	struct Space *new_space = (struct Space*) malloc(sizeof(struct Space));
 	printf("Moves:\n");
 	if (piece == mych) {
 		new_space = movediagonal(pos, forwardl);
-		int new_piece = board[new_space->x][new_space->y];
+		int new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", forwardl);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
 
 		new_space = movediagonal(pos, forwardr);
-		new_piece = board[new_space->x][new_space->y];
+		new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", forwardr);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
 	} else if (piece == myking) {
 		new_space = movediagonal(pos, forwardl);
-		int new_piece = board[new_space->x][new_space->y];
+		int new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", forwardl);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
 
 		new_space = movediagonal(pos, forwardr);
-		new_piece = board[new_space->x][new_space->y];
+		new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", forwardr);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
 		
 		new_space = movediagonal(pos, backl);
-		int new_piece = board[new_space->x][new_space->y];
+		new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", backl);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
 
 		new_space = movediagonal(pos, backr);
-		new_piece = board[new_space->x][new_space->y];
+		new_piece = board_struct->board[new_space->x][new_space->y];
 		if (new_piece == 0) {
-			printf("%d\n", i);
+			printf("%d\n", backr);
 		} else if ((new_piece==oppch) || (new_piece==oppking)) {
 			printcaptures(board_struct, pos, player, piece);
 		}
@@ -193,16 +203,53 @@ int printmoves(struct gamestate *board_struct, struct Space *pos, player) {
 	return 0;
 }
 
-int printcaptures(struct gamestate *board_struct, struct Space *pos, player, piece_type) {
-	printf("TODO: implement captures");
-	return 0;
-}
+
 
 int main() {
 	struct Space *pos = (struct Space*) malloc(sizeof(struct Space));
 	struct gamestate *board_struct = (struct gamestate*) malloc(sizeof(struct gamestate));
+
+	int board[8][8];
+	
+	for(int i = 0; i < 8; i++) {
+		for(int j = 0; j < 8; j++) {
+			if (i <= 2) { // AI pieces
+				if ((i == 0 || i == 2)) {
+					if (j % 2 != 0) {
+						board_struct->board[i][j] = XCHECK; //global var
+					} else {
+						board_struct->board[i][j] = EMPTY; 
+					}
+				} else {
+					if (j % 2 == 0) {
+						board_struct->board[i][j] = XCHECK; //global var
+					} else {
+						board_struct->board[i][j] = EMPTY; 
+					}
+				}
+			}
+			if (i >= 5) { // player pieces
+				if ((i == 5 || i == 7)) {
+					if (j % 2 == 0) {
+						board_struct->board[i][j] = CHECK; //global var
+					} else {
+						board_struct->board[i][j] = EMPTY; 
+					}
+				} else {
+					if (j % 2 != 0) {
+						board_struct->board[i][j] = CHECK; //global var
+					} else {
+						board_struct->board[i][j] = EMPTY; 
+					}
+				}
+			}
+		}
+	}
+
+
+
 	pos->x = 3;
 	pos->y = 2;
-	printmoves(1);
+	printmoves(board_struct, pos, 2);
 	return 0;
 }
