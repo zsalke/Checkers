@@ -11,17 +11,40 @@ struct gamestate {
 void step(struct gamestate *game){
 	
 	printboard(game->board);
-	//line after board, 
-	mvprintw(10, 0, "%s", "What would you like to do? You may:");
+	//line after board = 10
+	int line = 10;
+	int count = 0;
+       	mvprintw(line, 0, "%s", "What would you like to move?");
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++){
+			if (game->board[i][j] == CHECK){
+				//the first possible choice should print as "1."
+				count++;
+				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, i, j);
+			} else if (game->board[i][j] == KING) {
+				count++;
+				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
+			}
+		}
+	}	
+	int choice = getch();
+	int *xval;
+	int *yval;
+	//because of choices indexing from 1, this shouldn't reread the board/input prompt.
+	mvscanw(line+(choice-48),3,"%d %d", &xval, &yval);
+	mvprintw(line, 0, "%s", "What would you like to do? You may:");
 	//for choice in choices, print "%num: Move %check to %square")
-	int choiceslen = 1;
+	struct gamestate futures[] = checkmove(game, *xval, *yval);	
+	//check gamestates[i] presentcoords variable
+	//and check if pastcoords match xval/yval in case recursivity does weird shit
+	//print that present as a possibility
+	//have player make selection
+	//do the board thing
+	
 	getch();
 	//choices shouuld be listed with numbers
 	//after player chooses, destroy the extra prints
-	for (int i = 0; i < choiceslen; i++) {
-		move(10+i, 0);
-		clrtoeol();
-	}
+	clear();
 	getch();
 	//update board with player turn then opponent turn
 	//loop until completion
