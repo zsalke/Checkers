@@ -14,7 +14,8 @@ void step(struct gamestate *game){
 	//line after board = 10
 	int line = 10;
 	int count = 0;
-       	mvprintw(line, 0, "%s", "What would you like to move?");
+	//create some way to store the indices of possible checks in relation to count
+	mvprintw(line, 0, "%s", "What would you like to move?");
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++){
 			if (game->board[i][j] == CHECK){
@@ -26,15 +27,14 @@ void step(struct gamestate *game){
 				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
 			}
 		}
-	}	
+	}
+	count++;
+	mvprintw(line+count, 0, "%s", "Please choose a number from the list.");
+
 	int choice = getch();
-	int *xval;
-	int *yval;
-	//because of choices indexing from 1, this shouldn't reread the board/input prompt.
-	mvscanw(line+(choice-48),3,"%d %d", &xval, &yval);
-	mvprintw(line, 0, "%s", "What would you like to do? You may:");
-	//for choice in choices, print "%num: Move %check to %square")
-	struct gamestate futures[] = checkmove(game, *xval, *yval);	
+	//go to index[choice] to get xval and yval.
+	
+	struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
 	//and check if pastcoords match xval/yval in case recursivity does weird shit
 	//print that present as a possibility
