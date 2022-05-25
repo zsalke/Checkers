@@ -9,4 +9,13 @@
 #define XCHECK 3
 #define XKING 4
 
+#ifndef HEADER_FILE
+#define HEADER_FILE
+
+
 void printboard(int [8][8]);
+struct board;
+struct space;
+
+
+#endif
