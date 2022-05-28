@@ -2,6 +2,10 @@
 
 // put global variables here
 
+struct coord {
+	int x;
+	int y;
+};
 struct gamestate {
         int board[8][8];
         int turn;
@@ -11,17 +15,52 @@ struct gamestate {
 void step(struct gamestate *game){
 	
 	printboard(game->board);
-	//line after board, 
-	mvprintw(10, 0, "%s", "What would you like to do? You may:");
-	//for choice in choices, print "%num: Move %check to %square")
-	int choiceslen = 1;
-	getch();
-	//choices shouuld be listed with numbers
-	//after player chooses, destroy the extra prints
-	for (int i = 0; i < choiceslen; i++) {
-		move(10+i, 0);
-		clrtoeol();
+	//line after board = 10
+	int line = 10;
+	int count = 0;
+	//The maximum checkers you can have is 12.
+	struct coord checks[12];
+	struct coord kings[12];
+	mvprintw(line, 0, "%s", "What would you like to move?");
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++){
+			if (game->board[i][j] == CHECK){
+				//the first possible choice should print as "1."
+				struct coord ij = { i, j };
+				checks[count] = ij;
+				count++;
+				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, i, j);
+			} else if (game->board[i][j] == KING) {
+				struct coord ij = { i, j };
+				kings[count] = ij;	
+				count++;
+				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
+			}
+		}
 	}
+	count++;
+	mvprintw(line+count, 0, "%s", "Please choose a number from the list. ");
+
+	int choice = getch()-49;
+	/* the first valid checker is stored at checks[0], but
+	 * is listed as 1. to the player. hence, shifting the
+	 * player's choice to be 1 less will remove the error. 
+	 */
+	int xval = checks[choice].x;
+	int yval = checks[choice].y;
+	count++;
+	//mvprintw(line+count, 0, "%d, %d", xval, yval);
+	//struct gamestate futures[] = checkmove(game, xval, yval);	
+	//check gamestates[i] presentcoords variable
+	//and check if pastcoords match xval/yval in case recursivity does weird shit
+	//print that present as a possibility
+	//have player make selection
+	//if checkmove produces no possibilities, run choice again. maybe put in while loop
+	//until checkmove gives them something?
+	//do the board thing
+	
+	getch();
+	clear();
 	getch();
 	//update board with player turn then opponent turn
 	//loop until completion
@@ -81,7 +120,8 @@ int main() {
 
 	start_color();
 
-	struct gamestate *game; // will be initialized to default checkerboard
+	struct gamestate *game = malloc (sizeof(struct gamestate)); 
+	// will be initialized to default checkerboard
 	
 	initGame(game);
 
