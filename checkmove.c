@@ -20,6 +20,12 @@ struct LinkedList {
 	struct LinkedList *next;
 };
 
+// a struct for all possible moves for all pieces (of 1 player)
+struct MovesLists {
+	struct LinkedList *list;
+	struct MovesLists *next;
+}
+
 void append(struct LinkedList *list, struct gamestate *new) {
 	while (list->next) {
 		list = list->next;
@@ -27,6 +33,15 @@ void append(struct LinkedList *list, struct gamestate *new) {
 	list->next = malloc(sizeof(struct LinkedList));
 	list->next->move = new;
 	list->next->next = NULL;
+}
+
+void appendMovesLists(struct MovesLists *lists, struct LinkedList *new) {
+        while (lists->next) {
+                lists = lists->next;
+        }
+        lists->next = malloc(sizeof(struct MovesLists));
+        lists->next->list = new;
+        lists->next->next = NULL;
 }
 
 void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int curr_y) {
@@ -156,7 +171,34 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	return move_list;
 }
 	
+// returns a LinkedList of LinkedLists of all possible moves
+// based on the given player (pass in gamestate->turn % 2)
+struct LinkedList *getAllmoves(struct gamestate *game, int isPlayer) {
+	MovesLists *allmoves = malloc(sizeof(MovesLists));
+	allmoves->next = NULL;
+        allmoves->list = NULL;
 
+	if (isPlayer == 0) { // player's turn
+		for (int i = 0; i < 12; i++) {
+			Piece p = game->player_pieces[i];
+			if (p != NULL) {
+				LinkedList *piecemoves = getmoves(game, p->coord->x, p->coord->y); // possible moves for 1 piece
+				appendList(allmoves, piecemoves);
+			}
+		}
+	}
+	else { // isAI
+		for (int i = 0; i < 12; i++) {
+                        Piece p = game->ai_pieces[i];
+                        if (p != NULL) {
+                                LinkedList *piecemoves = getmoves(game, p->coord->x, p->coord->y); // possible moves for 1 piece
+                                appendList(allmoves, piecemoves);
+                        }
+                }
+	}
+
+	return playerAllmoves;
+}
 
 
 /*

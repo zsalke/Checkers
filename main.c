@@ -2,10 +2,18 @@
 
 // put global variables here
 
+struct piece {
+	int value; // either CHECK or KING
+	struct space coords; // its i & j in board
+}
+
 struct gamestate {
         int board[8][8];
         int turn;
         int score;
+	piece player_pieces[12]; // starts w/ 12
+	piece ai_pieces[12];
+	gamestate parent; // for AI predicting move purposes
 };
 
 void step(struct gamestate *game){
