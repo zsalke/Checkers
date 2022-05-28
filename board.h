@@ -15,7 +15,10 @@
 
 void printboard(int [8][8]);
 struct board;
-struct space;
+struct Space {
+        int x;
+        int y;
+};
 
 
 #endif

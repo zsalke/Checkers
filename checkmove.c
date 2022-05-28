@@ -15,11 +15,6 @@ struct gamestate {
 	int curr_y;
 };
 
-struct Space {
-	int x;
-	int y;
-};
-
 struct LinkedList {
 	struct gamestate *move;
 	struct LinkedList *next;

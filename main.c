@@ -2,10 +2,6 @@
 
 // put global variables here
 
-struct coord {
-	int x;
-	int y;
-};
 struct gamestate {
         int board[8][8];
         int turn;
@@ -19,19 +15,19 @@ void step(struct gamestate *game){
 	int line = 10;
 	int count = 0;
 	//The maximum checkers you can have is 12.
-	struct coord checks[12];
-	struct coord kings[12];
+	struct Space checks[12];
+	struct Space kings[12];
 	mvprintw(line, 0, "%s", "What would you like to move?");
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++){
 			if (game->board[i][j] == CHECK){
 				//the first possible choice should print as "1."
-				struct coord ij = { i, j };
+				struct Space ij = { i, j };
 				checks[count] = ij;
 				count++;
 				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, i, j);
 			} else if (game->board[i][j] == KING) {
-				struct coord ij = { i, j };
+				struct Space ij = { i, j };
 				kings[count] = ij;	
 				count++;
 				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
@@ -48,6 +44,7 @@ void step(struct gamestate *game){
 	 */
 	int xval = checks[choice].x;
 	int yval = checks[choice].y;
+	//not yet compatible with kings, can fix if we don't cut kings
 	count++;
 	//mvprintw(line+count, 0, "%d, %d", xval, yval);
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
