@@ -3,7 +3,7 @@
 #include "board.h"
 
 #ifndef CHECKMOVE_HEADER
-#define CHECKMAVE_HEADER
+#define CHECKMOVE_HEADER
 
 struct LinkedList {
 	struct gamestate *move;
