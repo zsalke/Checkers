@@ -63,7 +63,7 @@ void step(struct gamestate *game){
 	
 	struct LinkedList *list = malloc(sizeof(struct LinkedList));
 
-	list = getmoves(*game, xval, yval);
+	list = getmoves(game, xval, yval);
 	
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
@@ -137,8 +137,11 @@ int main() {
 	
 	initGame(game);
 
+
+	
 	step(game); //prints board, passes gamestate
 	//depending on turn #, changes the order of player turn and opponent turn
 	
-//	endwin();
+	endwin();
+	free(game);
 }

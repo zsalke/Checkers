@@ -1,4 +1,4 @@
-TARGETS = printboardnc
+TARGETS = main
 CFLAGS = -g -pedantic -Wall -Wextra -std=c99
 all = $(TARGETS)
 
@@ -12,4 +12,4 @@ checkmove.o: checkmove.c board.h checkmove.h
 	gcc $(CFLAGS) -c checkmove.c
 
 clean:
-	-rm *.o *~ $(TARGETS)
+	rm -f *.o *~ $(TARGETS) core
