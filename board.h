@@ -33,7 +33,7 @@ struct gamestate {
 	int curr_y;
 
 	struct piece player_pieces[12]; // starts w/ 12
-	struct piece ai_pieces[12];
+	struct piece ai_pieces[12]; // a value of -1 means it was captured
 	struct gamestate *parent; // for AI predicting move purposes
 };
 
