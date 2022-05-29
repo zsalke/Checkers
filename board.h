@@ -17,7 +17,7 @@ struct Space {
         int y;
 };
 
-struct piece {
+struct Piece {
 	int value; // either CHECK or KING
 	struct Space coords; // its i & j in board
 };
@@ -32,13 +32,29 @@ struct gamestate {
 	int curr_x;
 	int curr_y;
 
-	struct piece player_pieces[12]; // starts w/ 12
-	struct piece ai_pieces[12]; // a value of -1 means it was captured
+	struct Piece *player_pieces[12]; // starts w/ 12
+	struct Piece *ai_pieces[12];
 	struct gamestate *parent; // for AI predicting move purposes
 };
 
 
 
+struct LinkedList {
+	struct gamestate *move;
+	struct LinkedList *next;
+};
+
+struct MovesLists;
+
+
+
+
+
 void printboard(int [8][8]);
 struct board;
+
+
+
+
+
 #endif

@@ -2,15 +2,23 @@
 #include <string.h>
 #include "board.h"
 
-#ifndef HEADER_FILE
-#define HEADER_FILE
+#ifndef CHECKMOVE_HEADER
+#define CHECKMOVE_HEADER
+/*
+struct LinkedList {
+	struct gamestate *move;
+	struct LinkedList *next;
+};
 
-struct LinkedList;
 struct MovesLists;
-
+*/
 void append(struct LinkedList, struct gamestate);
 void appendMovesLists(struct MovesLists, struct LinkedList);
 void setmove(struct gamestate, int prev_x, int prev_y, int curr_x, int curr_y);
 void printcaptures(struct gamestate, int x, int ydir, bool king, struct LinkedList);
-struct LinkedList *printmoves(struct gamestate, int x, int y);
-struct LinkedList *getAllmoves(struct gamestate, int isPlayer);
+struct LinkedList *getmoves(struct gamestate, int x, int y);
+struct LinkedList *getAllmoves(struct gamestate, int);
+
+
+
+#endif
