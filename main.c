@@ -60,9 +60,9 @@ void step(struct gamestate *game){
 	count++;
 	mvprintw(line+count, 0, "%d, %d", xval, yval);
 	
-	struct LinkedList list = malloc(sizeof(struct LinkedList));
+	struct LinkedList *list = malloc(sizeof(struct LinkedList));
 
-	list = getmoves(game, xval, yval);
+	list = getmoves(*game, xval, yval);
 	
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
