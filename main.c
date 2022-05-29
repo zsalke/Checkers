@@ -1,4 +1,4 @@
-#include "board.h"
+#include "checkmove.h"
 
 // put global variables here
 
@@ -56,6 +56,11 @@ void step(struct gamestate *game){
 	//not yet compatible with kings, can fix if we don't cut kings
 	count++;
 	mvprintw(line+count, 0, "%d, %d", xval, yval);
+	
+	struct LinkedList list = malloc(sizeof(struct LinkedList));
+
+	list = getmoves(game, xval, yval);
+	
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
 	//and check if pastcoords match xval/yval in case recursivity does weird shit
