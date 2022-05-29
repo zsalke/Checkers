@@ -12,6 +12,17 @@
 #ifndef HEADER_FILE
 #define HEADER_FILE
 
+struct Space {
+        int x;
+        int y;
+};
+
+struct piece {
+	int value; // either CHECK or KING
+	struct Space coords; // its i & j in board
+};
+
+
 struct gamestate {
         int board[8][8];
         int turn;
@@ -20,21 +31,14 @@ struct gamestate {
 	int prev_y;
 	int curr_x;
 	int curr_y;
-};
 
-struct LinkedList {
-	struct gamestate *move;
-	struct LinkedList *next;
+	struct piece player_pieces[12]; // starts w/ 12
+	struct piece ai_pieces[12];
+	struct gamestate *parent; // for AI predicting move purposes
 };
 
 
 
 void printboard(int [8][8]);
 struct board;
-struct Space {
-        int x;
-        int y;
-};
-
-
 #endif
