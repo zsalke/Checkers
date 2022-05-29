@@ -178,7 +178,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	
 // returns a LinkedList of LinkedLists of all possible moves
 // based on the given player (pass in gamestate->turn % 2)
-struct LinkedList *getAllmoves(struct gamestate *game, int isPlayer) {
+struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 	MovesLists *allmoves = malloc(sizeof(MovesLists));
 	allmoves->next = NULL;
         allmoves->list = NULL;
