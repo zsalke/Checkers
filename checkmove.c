@@ -24,7 +24,7 @@ struct LinkedList {
 struct MovesLists {
 	struct LinkedList *list;
 	struct MovesLists *next;
-}
+};
 
 // List operations
 void append(struct LinkedList *list, struct gamestate *new) {
@@ -36,7 +36,7 @@ void append(struct LinkedList *list, struct gamestate *new) {
 	list->next->next = NULL;
 }
 
-void appendMovesLists(struct MovesLists *lists, struct LinkedList *new) {
+void appendList(struct MovesLists *lists, struct LinkedList *new) {
         while (lists->next) {
                 lists = lists->next;
         }
@@ -179,30 +179,30 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 // returns a LinkedList of LinkedLists of all possible moves
 // based on the given player (pass in gamestate->turn % 2)
 struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
-	MovesLists *allmoves = malloc(sizeof(MovesLists));
+	struct MovesLists *allmoves = malloc(sizeof(struct MovesLists));
 	allmoves->next = NULL;
         allmoves->list = NULL;
 
 	if (isPlayer == 0) { // player's turn
 		for (int i = 0; i < 12; i++) {
-			Piece p = game->player_pieces[i];
-			if (p != NULL) {
-				LinkedList *piecemoves = getmoves(game, p->coord->x, p->coord->y); // possible moves for 1 piece
+			struct Piece *p = game->player_pieces[i];
+			if (p) {
+				struct LinkedList *piecemoves = getmoves(game, p->coords.x, p->coords.y); // possible moves for 1 piece
 				appendList(allmoves, piecemoves);
 			}
 		}
 	}
 	else { // isAI
 		for (int i = 0; i < 12; i++) {
-                        Piece p = game->ai_pieces[i];
-                        if (p != NULL) {
-                                LinkedList *piecemoves = getmoves(game, p->coord->x, p->coord->y); // possible moves for 1 piece
+                        struct Piece *p = game->ai_pieces[i];
+                        if (p) {
+                                struct LinkedList *piecemoves = getmoves(game, p->coords.x, p->coords.y); // possible moves for 1 piece
                                 appendList(allmoves, piecemoves);
                         }
                 }
 	}
 
-	return playerAllmoves;
+	return allmoves;
 }
 
 

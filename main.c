@@ -1,4 +1,5 @@
 #include "checkmove.h"
+#include "board.h" 
 
 // put global variables here
 /*
