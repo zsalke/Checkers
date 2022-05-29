@@ -81,6 +81,22 @@ void step(struct gamestate *game){
 	exit(0); 
 }
 
+void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
+	p->value = val;
+	p->coords->x = x; //syntax here may be wrong..
+	p->coords->y = y;
+
+	if (isPlayer) {
+		static p_idx = 0;
+		b->player_pieces[p_idx] = p;
+		p_idx++;
+	} else {
+		static ai_idx = 0;
+		b->ai_pieces[ai_idx] = p;
+		ai_idx++;
+	}
+}
+
 void initGame(struct gamestate *b) {
 	(*b).turn = 0; // player go 1st for now
 	(*b).score = 0;
@@ -92,12 +108,16 @@ void initGame(struct gamestate *b) {
 				if ((i == 0 || i == 2)) {
 					if (j % 2 != 0) {
 						(*b).board[i][j] = XCHECK; //global var
+						Piece *p = malloc(sizeof(Piece));
+						initPiece(p, b, XCHECK, i, j, 0);
 					} else {
 						(*b).board[i][j] = EMPTY; 
 					}
 				} else {
 					if (j % 2 == 0) {
 						(*b).board[i][j] = XCHECK; //global var
+						Piece *p = malloc(sizeof(Piece));
+                                                initPiece(p, b, XCHECK, i, j, 0);
 					} else {
 						(*b).board[i][j] = EMPTY; 
 					}
@@ -107,12 +127,16 @@ void initGame(struct gamestate *b) {
 				if ((i == 5 || i == 7)) {
 					if (j % 2 == 0) {
 						(*b).board[i][j] = CHECK; //global var
+						Piece *p = malloc(sizeof(Piece));
+                                                initPiece(p, b, CHECK, i, j, 1);
 					} else {
 						(*b).board[i][j] = EMPTY; 
 					}
 				} else {
 					if (j % 2 != 0) {
 						(*b).board[i][j] = CHECK; //global var
+						Piece *p = malloc(sizeof(Piece));
+                                                initPiece(p, b, CHECK, i, j, 1);
 					} else {
 						(*b).board[i][j] = EMPTY; 
 					}
