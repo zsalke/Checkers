@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "board.h"
-
+/*
 struct gamestate {
         int board[8][8];
         int turn;
@@ -19,13 +19,14 @@ struct LinkedList {
 	struct gamestate *move;
 	struct LinkedList *next;
 };
-
+*/
 // a struct for all possible moves for all pieces (of 1 player)
 struct MovesLists {
 	struct LinkedList *list;
 	struct MovesLists *next;
 }
 
+// List operations
 void append(struct LinkedList *list, struct gamestate *new) {
 	while (list->next) {
 		list = list->next;
@@ -44,6 +45,7 @@ void appendMovesLists(struct MovesLists *lists, struct LinkedList *new) {
         lists->next->next = NULL;
 }
 
+// Abstraction to set variables in a gamestate
 void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int curr_y) {
 			move->board[curr_y][curr_x] = move->board[prev_y][prev_x];
 			move->board[prev_y][prev_x] = 0;
@@ -55,10 +57,10 @@ void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int cur
 
 void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool king, struct LinkedList *move_list) {
 	// TODO implement kings	
-	printf("Print captures\n");
+//	printf("Print captures\n");
 	if ((x>1 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x-1] == XCHECK) || (board_struct->board[y+ydir][x-1] == XKING))) {
 		if (board_struct->board[y+2*ydir][x-2] == 0) {
-			printf("%d, %d\n", x-2, y+2*ydir);
+//			printf("%d, %d\n", x-2, y+2*ydir);
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
 			setmove(new_move, x, y, x-2, y+2*ydir);
@@ -70,7 +72,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 	}
 	if ((x<6 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x+1] == XCHECK) || (board_struct->board[y+ydir][x+1] == XKING))) {
 		if (board_struct->board[y+2*ydir][x+2] == 0) {
-			printf("%d, %d\n", x+2, y+2*ydir);
+//			printf("%d, %d\n", x+2, y+2*ydir);
 
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
@@ -97,7 +99,9 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 	}
 }
 
+// Return a list of available moves for a given piece in a board state
 struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
+
 	struct LinkedList *move_list = malloc(sizeof(struct LinkedList));
 	move_list->next = NULL;
 	move_list->move = NULL;
@@ -107,36 +111,37 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	int type = board_struct->board[y][x];
 
 	if (type == CHECK) {
-		printf("Checker\n");
+//		printf("Checker\n");
 		ydir = -1;
 		king = false;
 	} else if (type == KING) {
-		printf("King\n");
+//		printf("King\n");
 		ydir = -1;
 		king = true;
 	} else if (type == XCHECK) {
-		printf("Enemy checker\n");
+//		printf("Enemy checker\n");
 		ydir = 1;
 		king = false;
 	} else if (type == XKING) {
-		printf("Enemy king\n");
+//		printf("Enemy king\n");
 		ydir = 1;
 		king = true;
 	} else {
-		printf("No checker here!\n");
+//		printf("No checker here!\n");
 		exit(1);
 	}
-	printf("Ydir: %d\n", ydir);
+
+//	printf("Ydir: %d\n", ydir);
 	if (((y+ydir) >= 0) && ((y+ydir) <= 7)) {
 		if ((x > 0) && (board_struct->board[y+ydir][x-1] == 0)) {
-			printf("Left: %d, %d\n", x-1, y+ydir);
+//			printf("Left: %d, %d\n", x-1, y+ydir);
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
 			setmove(new_move, x, y, x-1, y+ydir);
 			append(move_list, new_move);
 		}
 		if ((x < 7) && (board_struct->board[y+ydir][x+1] == 0)) {
-			printf("Right: %d, %d\n", x+1, y+ydir);
+//			printf("Right: %d, %d\n", x+1, y+ydir);
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
 
@@ -148,7 +153,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	if (king) {
 		if (((y-ydir) >= 0) && ((y-ydir) <= 7)) {
 			if ((x > 0) && (board_struct->board[y-ydir][x-1] == 0)) {
-				printf("%d, %d\n", x-1, y-ydir);
+//				printf("%d, %d\n", x-1, y-ydir);
 				struct gamestate *new_move = malloc(sizeof(struct gamestate));
 				memcpy(new_move, board_struct, sizeof(struct gamestate));
 				new_move->board[y-ydir][x-1] = new_move->board[y][x];
@@ -156,7 +161,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 				append(move_list, new_move);
 			}
 			if ((x < 7) && (board_struct->board[y-ydir][x+1] == 0)) {
-				printf("%d, %d\n", x+1, y-ydir);
+//				printf("%d, %d\n", x+1, y-ydir);
 				struct gamestate *new_move = malloc(sizeof(struct gamestate));
 				memcpy(new_move, board_struct, sizeof(struct gamestate));
 				new_move->board[y-ydir][x+1] = new_move->board[y][x];

@@ -45,16 +45,17 @@ void step(struct gamestate *game){
 	count++;
 	mvprintw(line+count, 0, "%s", "Please choose a number from the list. ");
 
-	int choice = getch()-49;
-	/* the first valid checker is stored at checks[0], but
-	 * is listed as 1. to the player. hence, shifting the
-	 * player's choice to be 1 less will remove the error. 
-	 */
+	int choice;
+	scanw("%d", &choice);
+	choice--;
+	//Accounts for the first Space in checks being stored at 0
+	//while the first choice is printed as 1.
+	
 	int xval = checks[choice].x;
 	int yval = checks[choice].y;
 	//not yet compatible with kings, can fix if we don't cut kings
 	count++;
-	//mvprintw(line+count, 0, "%d, %d", xval, yval);
+	mvprintw(line+count, 0, "%d, %d", xval, yval);
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
 	//and check if pastcoords match xval/yval in case recursivity does weird shit
@@ -63,10 +64,8 @@ void step(struct gamestate *game){
 	//if checkmove produces no possibilities, run choice again. maybe put in while loop
 	//until checkmove gives them something?
 	//do the board thing
-	
-	getch();
+	getch();	
 	clear();
-	getch();
 	//update board with player turn then opponent turn
 	//loop until completion
 	endwin();
@@ -116,7 +115,6 @@ void initGame(struct gamestate *b) {
 
 int main() {
 	initscr();
-	cbreak(); //ncurses should get keyboard input directly
         if(has_colors() == FALSE) {
                 endwin();
                 printf("Your terminal does not support color.\n");

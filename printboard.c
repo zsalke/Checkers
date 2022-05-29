@@ -1,6 +1,6 @@
 #include "board.h"
 
-void printboard(int gamestate[8][8]){
+void printboard(int board[8][8]){
 	//screen should already be init in main
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	//opponent
@@ -10,19 +10,19 @@ void printboard(int gamestate[8][8]){
 		for (int j = 0; j < 8; j++){
 		//puts a | between each check
 			mvaddch(i+1, 2*j, '|');
-			if (gamestate[i][j]  == CHECK){
+			if (board[i][j]  == CHECK){
 				attron(COLOR_PAIR(1));
 				addch('c');
 				attroff(COLOR_PAIR(1));
-			} else if (gamestate[i][j] == KING) {
+			} else if (board[i][j] == KING) {
 				attron(COLOR_PAIR(1));
 				addch('C');
 				attroff(COLOR_PAIR(1));
-			} else if (gamestate[i][j] == XCHECK) {
+			} else if (board[i][j] == XCHECK) {
 				attron(COLOR_PAIR(2));
 				addch('c');
 				attroff(COLOR_PAIR(2));
-			} else if (gamestate[i][j] == XKING) {
+			} else if (board[i][j] == XKING) {
 				attron(COLOR_PAIR(2));
 				addch('C');
 				attroff(COLOR_PAIR(2));
