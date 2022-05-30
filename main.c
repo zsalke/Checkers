@@ -54,7 +54,7 @@ void step(struct gamestate *game){
 
 		list = getmoves(game, xval, yval);
 
-		if (list->next->move == NULL){ // skip sentinel node
+		if (!list->next){ // skip sentinel node
 			count++;
 			mvprintw(line+count, 0, "%s", "Sorry, this cannot go anywhere. Please pick another.");
 		} else {
@@ -68,8 +68,6 @@ void step(struct gamestate *game){
 
 	count = 0;
 	int listint=1;
-	count++;
-
 	mvprintw(line+count, 0, "You can move this piece (%d, %d) to:", xval, yval);	
 	list = list->next; //skip sentinel node
 
