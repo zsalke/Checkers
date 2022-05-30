@@ -211,6 +211,15 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 
 	printcaptures(board_struct, x, y, ydir, king, move_list);
 
+	// Hacky fix for captures
+	// In order to fix the origin of moves with multiple captures, reset all prev_x and prev_y values to original x and y
+	struct LinkedList *iterator = move_list;
+	while (iterator->next) {
+		iterator = iterator->next;
+		iterator->move->prev_x = x;
+		iterator->move->prev_y = y;
+	}
+
 	return move_list;
 }
 	

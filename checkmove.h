@@ -17,7 +17,7 @@ void appendMovesLists(struct MovesLists, struct LinkedList);
 void setmove(struct gamestate*, int prev_x, int prev_y, int curr_x, int curr_y);
 void printcaptures(struct gamestate*, int x, int ydir, bool king, struct LinkedList);
 struct LinkedList *getmoves(struct gamestate*, int x, int y);
-struct LinkedList *getAllmoves(struct gamestate*, int);
+struct MovesLists *getAllmoves(struct gamestate*, int);
 void freeLinkedList(struct LinkedList*);
 void freeMovesLists(struct MovesLists*);
 
