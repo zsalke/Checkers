@@ -83,16 +83,19 @@ void step(struct gamestate *game){
 		}
 	}	
 	scanw("%d", &choice);
-	
-	//have player make selection
-	//if checkmove produces no possibilities, run choice again. maybe put in while loop
-	//until checkmove gives them something?
-	//do the board thing
-	getch();	
 	clear();
 	//update board with player turn then opponent turn
+	list = getmoves(game, xval, yval);
+	list = list->next;
+	for (int i = 1; i < choice; i++) {
+		list = list->next;
+	}
+	printboard(list->move->board);
 	//loop until completion
-	
+	getch();
+	//wait
+	//opponent
+
 	freeLinkedList(list);
 
 	//here for testing purposes only:
