@@ -61,7 +61,7 @@ void step(struct gamestate *game){
 	count++;
 	mvprintw(line+count, 0, "%d, %d", xval, yval);
 	
-	struct LinkedList *list = malloc(sizeof(struct LinkedList));
+	struct LinkedList *list;
 
 	list = getmoves(game, xval, yval);
 	
@@ -77,6 +77,9 @@ void step(struct gamestate *game){
 	clear();
 	//update board with player turn then opponent turn
 	//loop until completion
+	
+	freeLinkedList(list);
+
 	endwin();
 	exit(0); 
 }
@@ -87,11 +90,11 @@ void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int 
 	p->coords.y = y;
 
 	if (isPlayer) {
-		static p_idx = 0;
+		static int p_idx = 0;
 		b->player_pieces[p_idx] = p;
 		p_idx++;
 	} else {
-		static ai_idx = 0;
+		static int ai_idx = 0;
 		b->ai_pieces[ai_idx] = p;
 		ai_idx++;
 	}
@@ -146,6 +149,13 @@ void initGame(struct gamestate *b) {
 	}
 }
 
+void freegame(struct gamestate *game) {
+	for (int i=0; i<12; i++) {
+		free(game->player_pieces[i]);
+		free(game->ai_pieces[i]);
+	}
+}
+
 int main() {
 	initscr();
         if(has_colors() == FALSE) {
@@ -160,12 +170,12 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
-
-
 	
 	step(game); //prints board, passes gamestate
 	//depending on turn #, changes the order of player turn and opponent turn
 	
 	endwin();
+	freegame(game);
 	free(game);
+	return 0;
 }
