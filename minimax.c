@@ -17,11 +17,17 @@ int calc_score(struct gamestate *game) {
 	int num_playerpieces = 0;
 	int num_aipieces = 0;
 	for (int i = 0; i < 12; i++) {
-		if (game->player_pieces[i]->value != -1) {
+		if (game->player_pieces[i]->value != EMPTY) {
 			num_playerpieces++;
+			if (game->player_pieces[i]->value == KING) {
+				num_playerpieces++; // extra pt for kings
+			}
 		}
-		if (game->ai_pieces[i]->value != -1) {
+		if (game->ai_pieces[i]->value != EMPTY) {
                         num_aipieces++;
+			if (game->ai_pieces[i]->value == XKING) {
+                                num_aipieces++; // extra pt for kings
+                        }
                 }
 	}
 
