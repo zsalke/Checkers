@@ -27,6 +27,28 @@ struct LinkedList {
 //};
 
 // List operations
+//
+//
+//
+
+void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
+	p->value = val;
+	p->coords.x = x; 
+	p->coords.y = y;
+
+	if (isPlayer) {
+		static int p_idx = 0;
+		b->player_pieces[p_idx] = p;
+		p_idx++;
+	} else {
+		static int ai_idx = 0;
+		b->ai_pieces[ai_idx] = p;
+		ai_idx++;
+	}
+}
+
+
+
 void append(struct LinkedList *list, struct gamestate *new) {
 	while (list->next) {
 		list = list->next;

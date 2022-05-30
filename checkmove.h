@@ -12,7 +12,9 @@ struct LinkedList {
 
 struct MovesLists;
 */
-void append(struct LinkedList, struct gamestate);
+
+void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer);
+void append(struct LinkedList*, struct gamestate*);
 void appendMovesLists(struct MovesLists, struct LinkedList);
 void setmove(struct gamestate*, int prev_x, int prev_y, int curr_x, int curr_y);
 void printcaptures(struct gamestate*, int x, int ydir, bool king, struct LinkedList);

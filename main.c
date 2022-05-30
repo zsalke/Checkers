@@ -82,7 +82,10 @@ struct gamestate *step(struct gamestate *game){
 			break;
 		}
 	}	
+
 	scanw("%d", &choice);
+	//do the board thing
+	getch();	
 	clear();
 	//update board with player turn then opponent turn
 	list = getmoves(game, xval, yval);
@@ -102,23 +105,6 @@ struct gamestate *step(struct gamestate *game){
 	//endwin();
 	//exit(0); 
 }
-
-void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
-	p->value = val;
-	p->coords.x = x; 
-	p->coords.y = y;
-
-	if (isPlayer) {
-		static int p_idx = 0;
-		b->player_pieces[p_idx] = p;
-		p_idx++;
-	} else {
-		static int ai_idx = 0;
-		b->ai_pieces[ai_idx] = p;
-		ai_idx++;
-	}
-}
-
 void initGame(struct gamestate *b) {
 	(*b).turn = 0; // player go 1st for now
 	(*b).score = 0;
@@ -200,7 +186,7 @@ int main() {
 		game = findBestMove(gameAfter);
 		printf("found!");
 		printboard(game->board);
-		step(game); //prints board, passes gamestate
+		gameAfter = step(game); //prints board, passes gamestate
 		//depending on turn #, changes the order of player turn and opponent turn
 	}
 

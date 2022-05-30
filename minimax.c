@@ -37,13 +37,33 @@ int calc_score(struct gamestate *game) {
 // finds board w/ min score to help AI get best move in reponse to player's best
 // MovesLists are nodes themselves
 struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
-	struct gamestate *minGame = allpossible_moves->next->list->next->move;
-	allpossible_moves = allpossible_moves->next; // null head
+	
+	if (!allpossible_moves->next) {
+		return NULL; // No moves possible
+	}
 
-	while (allpossible_moves != NULL) {
+	struct gamestate *minGame;
+
+	// Set min game to first possible gamestate
+	struct MovesLists *buffer = allpossible_moves;
+	while (buffer->next) {
+		buffer = buffer->next;
+		if (buffer->list->next) {
+			minGame = buffer->list->next;
+		}
+	}
+
+
+
+	while (allpossible_moves->next) {
+
+		allpossible_moves = allpossible_moves->next;
+
 		struct LinkedList *piece_moves = allpossible_moves->list;
 		
-		while (piece_moves != NULL) {
+		while (piece_moves->next) {
+			piece_moves = piece_moves->next;
+
 			struct gamestate *gameptr = piece_moves->move;
 
 			//NEED A UPDATE GAMESTATE FUNCTION ***
@@ -55,22 +75,38 @@ struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
 			if (gameptr->score < minGame->score) {
 				minGame = gameptr; //dk if work cuz &'s			
 			}
-			piece_moves = piece_moves->next;
 		}
-		allpossible_moves = allpossible_moves->next;
 	}
 
 	return minGame;
 }
 
 struct gamestate *findMaxGame(struct MovesLists *allpossible_moves) {
-        struct gamestate *maxGame = allpossible_moves->next->list->next->move;
-	allpossible_moves = allpossible_moves->next; // null head
 	
-	while (allpossible_moves != NULL) {
+	if (!allpossible_moves->next) {
+		return NULL; // No moves possible
+	}
+
+	struct gamestate *maxGame;
+
+	// Set max game to first possible gamestate
+	struct MovesLists *buffer = allpossible_moves;
+	while (buffer->next) {
+		buffer = buffer->next;
+		if (buffer->list->next) {
+			maxGame = buffer->list->next;
+		}
+	}
+
+	while (allpossible_moves->next) {
+
+                allpossible_moves = allpossible_moves->next;
+
                 struct LinkedList *piece_moves = allpossible_moves->list;
 
-                while (piece_moves != NULL) {
+                while (piece_moves->next) {
+                        piece_moves = piece_moves->next;
+
                         struct gamestate *gameptr = piece_moves->move;
 
                         //NEED A UPDATE GAMESTATE FUNCTION ***
@@ -82,9 +118,7 @@ struct gamestate *findMaxGame(struct MovesLists *allpossible_moves) {
                         if (gameptr->score < maxGame->score) {
                                 maxGame = gameptr; //dk if work cuz &'s                 
                         }
-                        piece_moves = piece_moves->next;
                 }
-                allpossible_moves = allpossible_moves->next;
         }
 
         return maxGame;
@@ -112,12 +146,13 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
         else {
                 struct MovesLists *allpossible_moves = getAllmoves(tmp, 1);
                 struct gamestate *maxGame = findMaxGame(allpossible_moves);
+		mvprintw(0, 0, "Address of maxGame: %p\n", maxGame);
                 maxGame->parent = parentGame;
                 /* NOTE: APPEND THESE GAMES TO A LINKEDLIST & RETURN IT HERE
                 *  TRAVERSE LINKEDLIST TO FIND MAX & RETURN ITS PARENT
                 *  ITS PARENT IN findBestMove
                 */
-                append(*depth3scores, *maxGame);
+                append(depth3scores, maxGame);
 
                 return;
                 //return maxGame->score;
@@ -127,7 +162,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
 
 // return init_possible_moves[best] (depth 1)
 struct gamestate *findBestMove(struct gamestate *curr) {
-	struct MovesLists *init_allpossible_moves = getAllmoves(curr, 1)->next;
+	struct MovesLists *init_allpossible_moves = getAllmoves(curr, 1);
 	struct LinkedList *depth3scores = malloc(sizeof(struct LinkedList*));
         depth3scores->next = NULL;
         depth3scores->move = NULL;
@@ -138,7 +173,9 @@ struct gamestate *findBestMove(struct gamestate *curr) {
 		init_allpossible_moves = init_allpossible_moves->next;
 		struct LinkedList *piece_moves = init_allpossible_moves->list;
 		
-		while (piece_moves != NULL) {
+		while (piece_moves->next) {
+
+			piece_moves = piece_moves->next;
 			struct gamestate *move = piece_moves->move;
 			move->turn = 2; 
 			
@@ -148,18 +185,16 @@ struct gamestate *findBestMove(struct gamestate *curr) {
 
 			findPossibleScores(move, move, depth3scores);	
 
-			piece_moves = piece_moves->next;
 		}
 	}
 
 	// traverse thru depth3scores & return its parent
-	depth3scores = depth3scores->next; // has sentinel head
 	struct gamestate *bestMove = depth3scores->next->move;
-	while (depth3scores != NULL) {
+	while (depth3scores->next) {
+		depth3scores = depth3scores->next;
 		if (bestMove->score < depth3scores->move->score) {
 			bestMove = depth3scores->move;
 		}
-		depth3scores = depth3scores->next;
 	}
 	
 	return bestMove->parent;
