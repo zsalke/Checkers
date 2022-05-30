@@ -71,6 +71,8 @@ void step(struct gamestate *game){
 	count++;
 
 	mvprintw(line+count, 0, "You can move this piece (%d, %d) to:", xval, yval);	
+	list = list->next; //skip sentinel node
+
 	while (list->move) {
 		count++;
 		struct gamestate *future = list->move;
