@@ -31,6 +31,7 @@ void printboard(int board[8][8]){
 			}
 			addch('|');
 		}
+		addch(i+48);
 	}
 	refresh();
 }
