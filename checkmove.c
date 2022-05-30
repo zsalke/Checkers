@@ -79,7 +79,6 @@ void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int cur
 }
 
 void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool king, struct LinkedList *move_list) {
-	// TODO implement kings	
 //	printf("Print captures\n");
 	if ((x>1 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x-1] == XCHECK) || (board_struct->board[y+ydir][x-1] == XKING))) {
 		if (board_struct->board[y+2*ydir][x-2] == 0) {
@@ -90,7 +89,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			new_move->board[y+ydir][x-1] = 0;
 			append(move_list, new_move);
 			
-			printcaptures(board_struct, x-2, y+2*ydir, ydir, king, move_list);
+			printcaptures(new_move, x-2, y+2*ydir, ydir, king, move_list);
 		}
 	}
 	if ((x<6 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x+1] == XCHECK) || (board_struct->board[y+ydir][x+1] == XKING))) {
@@ -103,7 +102,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			new_move->board[y+ydir][x+1] = 0;
 			append(move_list, new_move);
 
-			printcaptures(board_struct, x+2, y+2*ydir, ydir, king, move_list);
+			printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
 		}
 	}
 
@@ -112,11 +111,27 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 		if (x>1 && ((board_struct->board[y-ydir][x-1] == XCHECK) || (board_struct->board[y-ydir][x-1] == XKING))) {
 			if (board_struct->board[y-2*ydir][x-2] == 0) {
 				printf("%d, %d\n", x-2, y-2*ydir);
+
+				struct gamestate *new_move = malloc(sizeof(struct gamestate));
+				memcpy(new_move, board_struct, sizeof(struct gamestate));
+				setmove(new_move, x, y, x+2, y-2*ydir);
+				new_move->board[y-ydir][x+1] = 0;
+				append(move_list, new_move);
+
+				printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
 			}
 		}
 		if (x<6 && ((board_struct->board[y-ydir][x+1] == XCHECK) || (board_struct->board[y-ydir][x+1] == XKING))) {
 			if (board_struct->board[y-2*ydir][x+2] == 0) {
 				printf("%d, %d\n", x-2, y-2*ydir);
+
+				struct gamestate *new_move = malloc(sizeof(struct gamestate));
+				memcpy(new_move, board_struct, sizeof(struct gamestate));
+				setmove(new_move, x, y, x-2, y-2*ydir);
+				new_move->board[y-ydir][x-1] = 0;
+				append(move_list, new_move);
+
+				printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
 			}
 		}
 	}
@@ -195,6 +210,15 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	}
 
 	printcaptures(board_struct, x, y, ydir, king, move_list);
+
+	// Hacky fix for captures
+	// In order to fix the origin of moves with multiple captures, reset all prev_x and prev_y values to original x and y
+	struct LinkedList *iterator = move_list;
+	while (iterator->next) {
+		iterator = iterator->next;
+		iterator->move->prev_x = x;
+		iterator->move->prev_y = y;
+	}
 
 	return move_list;
 }
