@@ -133,7 +133,9 @@ struct gamestate *findBestMove(struct gamestate *curr) {
         depth3scores->move = NULL;
 	
 	// calc scores & build depth3scores (find max for each depth 1 move)
-	while (init_allpossible_moves != NULL) {
+	while (init_allpossible_moves->next) {
+		
+		init_allpossible_moves = init_allpossible_moves->next;
 		struct LinkedList *piece_moves = init_allpossible_moves->list;
 		
 		while (piece_moves != NULL) {
@@ -148,7 +150,6 @@ struct gamestate *findBestMove(struct gamestate *curr) {
 
 			piece_moves = piece_moves->next;
 		}
-		init_allpossible_moves = init_allpossible_moves->next;
 	}
 
 	// traverse thru depth3scores & return its parent
