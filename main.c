@@ -93,9 +93,9 @@ void step(struct gamestate *game){
 	printboard(list->move->board);
 	//loop until completion
 	getch();
-	//wait
-	//opponent
-
+	//one "step" in the game is now over, 
+	//and step() should be called again from main
+	//with the updated opponent board.
 	freeLinkedList(list);
 
 	//here for testing purposes only:
@@ -177,6 +177,7 @@ void freegame(struct gamestate *game) {
 }
 
 int main() {
+	int done = 0;
 	initscr();
         if(has_colors() == FALSE) {
                 endwin();
@@ -190,10 +191,17 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
+	step(game);
 	
+	//set to 1 here FOR DEBUG PURPOSES
+	done = 1;
+
+	while(!done){
+	//run opponent move, update game to equal the new gamestate after opponent move
 	step(game); //prints board, passes gamestate
 	//depending on turn #, changes the order of player turn and opponent turn
-	
+	}
+
 	endwin();
 	freegame(game);
 	free(game);
