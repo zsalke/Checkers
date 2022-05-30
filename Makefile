@@ -2,7 +2,7 @@ TARGETS = main
 CFLAGS = -g -pedantic -Wall -Wextra -std=c99
 all = $(TARGETS)
 
-main: main.c printboard.o checkmove.o minimax.o
+main: main.o printboard.o checkmove.o minimax.o
 	gcc $(CFLAGS) -o main main.o printboard.o checkmove.o minimax.o -lncurses
 
 main.o: main.c board.h checkmove.h minimax.h
