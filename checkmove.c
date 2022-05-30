@@ -217,7 +217,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 		isking = true;
 	} else {
 //		printf("No checker here!\n");
-		exit(1);
+		return move_list;
 	}
 
 //	printf("Ydir: %d\n", ydir);
