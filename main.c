@@ -1,24 +1,6 @@
 #include "checkmove.h"
 #include "board.h" 
-
-// put global variables here
-/*
-struct piece {
-	int value; // either CHECK or KING
-	struct Space coords; // its i & j in board
-};
-*/
-
-/* defined in board.h
-struct gamestate {
-        int board[8][8];
-        int turn;
-        int score;
-	piece player_pieces[12]; // starts w/ 12
-	piece ai_pieces[12];
-	gamestate parent; // for AI predicting move purposes
-};
-*/
+#include "minimax.h"
 
 void step(struct gamestate *game){
 	
@@ -34,15 +16,15 @@ void step(struct gamestate *game){
 		for (int j = 0; j < 8; j++){
 			if (game->board[i][j] == CHECK){
 				//the first possible choice should print as "1."
-				struct Space ij = { i, j };
-				checks[count] = ij;
+				struct Space check = { j, i };
+				checks[count] = check;
 				count++;
-				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, i, j);
+				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, j, i);
 			} else if (game->board[i][j] == KING) {
-				struct Space ij = { i, j };
-				kings[count] = ij;	
+				struct Space king = { j, i };
+				kings[count] = king;	
 				count++;
-				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
+				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, j, i);
 			}
 		}
 	}
@@ -61,10 +43,11 @@ void step(struct gamestate *game){
 	count++;
 	mvprintw(line+count, 0, "%d, %d", xval, yval);
 	
-	struct LinkedList *list = malloc(sizeof(struct LinkedList));
+	struct LinkedList *list;
 
 	list = getmoves(game, xval, yval);
-	
+		
+
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
 	//and check if pastcoords match xval/yval in case recursivity does weird shit
@@ -77,21 +60,26 @@ void step(struct gamestate *game){
 	clear();
 	//update board with player turn then opponent turn
 	//loop until completion
+	
+	freeLinkedList(list);
+
+	//here for testing purposes only:
+	//should only execute when gameover
 	endwin();
 	exit(0); 
 }
 
 void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
 	p->value = val;
-	p->coords.x = x; //syntax here may be wrong.. (Resolved)
+	p->coords.x = x; 
 	p->coords.y = y;
 
 	if (isPlayer) {
-		static p_idx = 0;
+		static int p_idx = 0;
 		b->player_pieces[p_idx] = p;
 		p_idx++;
 	} else {
-		static ai_idx = 0;
+		static int ai_idx = 0;
 		b->ai_pieces[ai_idx] = p;
 		ai_idx++;
 	}
@@ -146,6 +134,13 @@ void initGame(struct gamestate *b) {
 	}
 }
 
+void freegame(struct gamestate *game) {
+	for (int i=0; i<12; i++) {
+		free(game->player_pieces[i]);
+		free(game->ai_pieces[i]);
+	}
+}
+
 int main() {
 	initscr();
         if(has_colors() == FALSE) {
@@ -160,12 +155,12 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
-
-
 	
 	step(game); //prints board, passes gamestate
 	//depending on turn #, changes the order of player turn and opponent turn
 	
 	endwin();
+	freegame(game);
 	free(game);
+	return 0;
 }
