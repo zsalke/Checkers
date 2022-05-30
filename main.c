@@ -49,19 +49,19 @@ void step(struct gamestate *game){
 		//not yet compatible with kings, can fix if we don't cut kings
 		
 		//debug lines
-		count++;
-		mvprintw(line+count, 0, "%d, %d", xval, yval);
+		//count++;
+		//mvprintw(line+count, 0, "%d, %d", xval, yval);
 
 		list = getmoves(game, xval, yval);
-		
-		if (list->move == NULL){
+
+		if (list->next->move == NULL){ // skip sentinel node
 			count++;
 			mvprintw(line+count, 0, "%s", "Sorry, this cannot go anywhere. Please pick another.");
 		} else {
 			done = 1;
 		}	
 	}
-	for (int i = 0; i < count; i++){
+	for (int i = 0; i <= count; i++){
 		move(10+i, 0);
 		clrtoeol();
 	}	
@@ -71,6 +71,8 @@ void step(struct gamestate *game){
 	count++;
 
 	mvprintw(line+count, 0, "You can move this piece (%d, %d) to:", xval, yval);	
+	list = list->next; //skip sentinel node
+
 	while (list->move) {
 		count++;
 		struct gamestate *future = list->move;

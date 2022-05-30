@@ -5,7 +5,9 @@ void printboard(int board[8][8]){
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	//opponent
 	init_pair(2, COLOR_RED, COLOR_BLACK);
-
+	for (int i = 0; i < 8; i++){
+		mvaddch(0, 1+(2*i), i+48);
+	}
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 8; j++){
 		//puts a | between each check
@@ -31,6 +33,8 @@ void printboard(int board[8][8]){
 			}
 			addch('|');
 		}
+		addch(' ');
+		addch(i+48);
 	}
 	refresh();
 }
