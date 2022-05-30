@@ -36,6 +36,16 @@ void append(struct LinkedList *list, struct gamestate *new) {
 	list->next->next = NULL;
 }
 
+void freeLinkedList(struct LinkedList *head) {
+	struct LinkedList *buff;
+	while (head->next) {
+		buff = head->next;
+		free(head);
+		head = buff;
+	};
+	free(head);
+}	
+
 void appendList(struct MovesLists *lists, struct LinkedList *new) {
         while (lists->next) {
                 lists = lists->next;
@@ -44,6 +54,19 @@ void appendList(struct MovesLists *lists, struct LinkedList *new) {
         lists->next->list = new;
         lists->next->next = NULL;
 }
+
+
+void freeMovesLists(struct MovesLists *head) {
+	struct MovesLists *buff;
+	while (head->next) {
+		buff = head->next;
+		free(head);
+		head = buff;
+	};
+	free(head);
+}	
+
+
 
 // Abstraction to set variables in a gamestate
 void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int curr_y) {
@@ -105,7 +128,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	struct LinkedList *move_list = malloc(sizeof(struct LinkedList));
 	move_list->next = NULL;
 	move_list->move = NULL;
-
+//	printf("%p", board_struct);
 	int ydir;
 	int king;
 	int type = board_struct->board[y][x];
