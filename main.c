@@ -53,8 +53,8 @@ void step(struct gamestate *game){
 		mvprintw(line+count, 0, "%d, %d", xval, yval);
 
 		list = getmoves(game, xval, yval);
-		
-		if (list->move == NULL){
+
+		if (list->next->move == NULL){ // skip sentinel node
 			count++;
 			mvprintw(line+count, 0, "%s", "Sorry, this cannot go anywhere. Please pick another.");
 		} else {
