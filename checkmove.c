@@ -78,6 +78,26 @@ void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int cur
 			move->prev_y = prev_y;
 }
 
+// goes thru board & update piece arrays
+void updatePieceArrays(struct gamestate *new_move) {
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			if (new_move->board[i][j] != EMPTY) {
+				struct Piece *p = malloc(sizeof(struct Piece));
+				
+				// AI's piece
+				if (new_move->board[i][j] == 3 || new_move->board[i][j] == 4) {
+					initPiece(p, new_move, new_move->board[i][j], i, j, 0);
+				}
+				else { // player's piece
+					initPiece(p, new_move, new_move->board[i][j], i, j, 1);
+				}	
+			}
+		}
+	}
+}
+
+// 
 void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool king, struct LinkedList *move_list) {
 //	printf("Print captures\n");
 	if ((x>1 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x-1] == XCHECK) || (board_struct->board[y+ydir][x-1] == XKING))) {
@@ -86,7 +106,9 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
 			setmove(new_move, x, y, x-2, y+2*ydir);
-			new_move->board[y+ydir][x-1] = 0;
+			new_move->board[y+ydir][x-1] = 0; // captured piece
+			// remove captured piece from piece array
+			updatePieceArrays(new_move);
 			append(move_list, new_move);
 			
 			printcaptures(new_move, x-2, y+2*ydir, ydir, king, move_list);
@@ -100,6 +122,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			memcpy(new_move, board_struct, sizeof(struct gamestate));
 			setmove(new_move, x, y, x+2, y+2*ydir);
 			new_move->board[y+ydir][x+1] = 0;
+			updatePieceArrays(new_move);
 			append(move_list, new_move);
 
 			printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
@@ -116,6 +139,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 				memcpy(new_move, board_struct, sizeof(struct gamestate));
 				setmove(new_move, x, y, x+2, y-2*ydir);
 				new_move->board[y-ydir][x+1] = 0;
+				updatePieceArrays(new_move);
 				append(move_list, new_move);
 
 				printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
@@ -129,6 +153,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 				memcpy(new_move, board_struct, sizeof(struct gamestate));
 				setmove(new_move, x, y, x-2, y-2*ydir);
 				new_move->board[y-ydir][x-1] = 0;
+				updatePieceArrays(new_move);
 				append(move_list, new_move);
 
 				printcaptures(new_move, x+2, y+2*ydir, ydir, king, move_list);
