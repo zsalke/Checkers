@@ -29,28 +29,60 @@ void step(struct gamestate *game){
 	}
 	count++;
 	mvprintw(line+count, 0, "%s", "Please choose a number from the list. ");
-
+	
 	int choice;
-	scanw("%d", &choice);
-	choice--;
-	//Accounts for the first Space in checks being stored at 0
-	//while the first choice is printed as 1.
-	
-	int xval = checks[choice].x;
-	int yval = checks[choice].y;
-	//not yet compatible with kings, can fix if we don't cut kings
-	count++;
-	mvprintw(line+count, 0, "%d, %d", xval, yval);
-	
+	int done = 0;
+	int xval = 0;
+	int yval = 0;
+
 	struct LinkedList *list = malloc(sizeof(struct LinkedList));
-
-	list = getmoves(game, xval, yval);
+	while (!done) {
+		scanw("%d", &choice);
 		
+		choice--;
+		//Accounts for the first Space in checks being stored at 0
+		//while the first choice is printed as 1.
 
-	//struct gamestate futures[] = checkmove(game, xval, yval);	
-	//check gamestates[i] presentcoords variable
-	//and check if pastcoords match xval/yval in case recursivity does weird shit
-	//print that present as a possibility
+		int xval = checks[choice].x;
+		int yval = checks[choice].y;
+		//not yet compatible with kings, can fix if we don't cut kings
+		
+		//debug lines
+		count++;
+		mvprintw(line+count, 0, "%d, %d", xval, yval);
+
+		list = getmoves(game, xval, yval);
+		
+		if (list->move == NULL){
+			count++;
+			mvprintw(line+count, 0, "%s", "Sorry, this cannot go anywhere. Please pick another.");
+		} else {
+			done = 1;
+		}	
+	}
+	for (int i = 0; i < count; i++){
+		move(10+i, 0);
+		clrtoeol();
+	}	
+
+	count = 0;
+	int listint=1;
+	count++;
+
+	mvprintw(line+count, 0, "You can move this piece (%d, %d) to:", xval, yval);	
+	while (list->move) {
+		count++;
+		struct gamestate *future = list->move;
+		mvprintw(line+count, 0, "%d. (%d, %d).", listint, future->curr_x, future->curr_y);
+		listint++;
+		if (list->next){
+			list = list->next;
+		} else {
+			break;
+		}
+	}	
+	scanw("%d", &choice);
+	
 	//have player make selection
 	//if checkmove produces no possibilities, run choice again. maybe put in while loop
 	//until checkmove gives them something?
