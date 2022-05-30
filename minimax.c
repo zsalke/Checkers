@@ -19,7 +19,7 @@ int calc_score(struct gamestate *game) {
 	for (int i = 0; i < 12; i++) {
 		if (game->player_pieces[i]->value != EMPTY) {
 			num_playerpieces++;
-			if (player_pieces[i]->value == KING) {
+			if (game->player_pieces[i]->value == KING) {
 				num_playerpieces++; // extra pt for kings
 			}
 		}
