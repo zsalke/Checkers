@@ -2,7 +2,7 @@
 #include "board.h" 
 #include "minimax.h"
 
-void step(struct gamestate *game){
+struct gamestate *step(struct gamestate *game){
 	
 	printboard(game->board);
 	//line after board = 10
@@ -96,12 +96,11 @@ void step(struct gamestate *game){
 	//one "step" in the game is now over, 
 	//and step() should be called again from main
 	//with the updated opponent board.
-	freeLinkedList(list);
-
+	return list->move;
 	//here for testing purposes only:
 	//should only execute when gameover
-	endwin();
-	exit(0); 
+	//endwin();
+	//exit(0); 
 }
 
 void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
@@ -191,15 +190,18 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
-	step(game);
+	struct gamestate *gameAfter;
+	gameAfter = step(game);
 	
 	//set to 1 here FOR DEBUG PURPOSES
-	done = 1;
+	//done = 1;
 
 	while(!done){
-	//run opponent move, update game to equal the new gamestate after opponent move
-	step(game); //prints board, passes gamestate
-	//depending on turn #, changes the order of player turn and opponent turn
+		game = findBestMove(gameAfter);
+		printf("found!");
+		printboard(game->board);
+		step(game); //prints board, passes gamestate
+		//depending on turn #, changes the order of player turn and opponent turn
 	}
 
 	endwin();
