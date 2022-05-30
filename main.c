@@ -1,5 +1,6 @@
 #include "checkmove.h"
 #include "board.h" 
+#include "minimax.h"
 
 void step(struct gamestate *game){
 	
