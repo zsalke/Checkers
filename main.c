@@ -1,25 +1,6 @@
 #include "checkmove.h"
 #include "board.h" 
 
-// put global variables here
-/*
-struct piece {
-	int value; // either CHECK or KING
-	struct Space coords; // its i & j in board
-};
-*/
-
-/* defined in board.h
-struct gamestate {
-        int board[8][8];
-        int turn;
-        int score;
-	piece player_pieces[12]; // starts w/ 12
-	piece ai_pieces[12];
-	gamestate parent; // for AI predicting move purposes
-};
-*/
-
 void step(struct gamestate *game){
 	
 	printboard(game->board);
@@ -34,15 +15,15 @@ void step(struct gamestate *game){
 		for (int j = 0; j < 8; j++){
 			if (game->board[i][j] == CHECK){
 				//the first possible choice should print as "1."
-				struct Space ij = { i, j };
-				checks[count] = ij;
+				struct Space check = { j, i };
+				checks[count] = check;
 				count++;
-				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, i, j);
+				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, j, i);
 			} else if (game->board[i][j] == KING) {
-				struct Space ij = { i, j };
-				kings[count] = ij;	
+				struct Space king = { j, i };
+				kings[count] = king;	
 				count++;
-				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, i, j);
+				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, j, i);
 			}
 		}
 	}
@@ -64,7 +45,8 @@ void step(struct gamestate *game){
 	struct LinkedList *list = malloc(sizeof(struct LinkedList));
 
 	list = getmoves(game, xval, yval);
-	
+		
+
 	//struct gamestate futures[] = checkmove(game, xval, yval);	
 	//check gamestates[i] presentcoords variable
 	//and check if pastcoords match xval/yval in case recursivity does weird shit
@@ -77,13 +59,16 @@ void step(struct gamestate *game){
 	clear();
 	//update board with player turn then opponent turn
 	//loop until completion
+	
+	//here for testing purposes only:
+	//should only execute when gameover
 	endwin();
 	exit(0); 
 }
 
 void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
 	p->value = val;
-	p->coords.x = x; //syntax here may be wrong.. (Resolved)
+	p->coords.x = x; 
 	p->coords.y = y;
 
 	if (isPlayer) {
