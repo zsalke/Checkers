@@ -21,10 +21,10 @@ struct LinkedList {
 };
 */
 // a struct for all possible moves for all pieces (of 1 player)
-struct MovesLists {
-	struct LinkedList *list;
-	struct MovesLists *next;
-};
+//struct MovesLists {
+//	struct LinkedList *list;
+//	struct MovesLists *next;
+//};
 
 // List operations
 void append(struct LinkedList *list, struct gamestate *new) {

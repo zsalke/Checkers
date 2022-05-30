@@ -44,8 +44,10 @@ struct LinkedList {
 	struct LinkedList *next;
 };
 
-struct MovesLists;
-
+struct MovesLists {
+        struct LinkedList *list;
+        struct MovesLists *next;
+};
 
 
 
