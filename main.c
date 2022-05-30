@@ -49,8 +49,8 @@ void step(struct gamestate *game){
 		//not yet compatible with kings, can fix if we don't cut kings
 		
 		//debug lines
-		count++;
-		mvprintw(line+count, 0, "%d, %d", xval, yval);
+		//count++;
+		//mvprintw(line+count, 0, "%d, %d", xval, yval);
 
 		list = getmoves(game, xval, yval);
 
@@ -61,7 +61,7 @@ void step(struct gamestate *game){
 			done = 1;
 		}	
 	}
-	for (int i = 0; i < count; i++){
+	for (int i = 0; i <= count; i++){
 		move(10+i, 0);
 		clrtoeol();
 	}	
