@@ -1,5 +1,6 @@
 #include "checkmove.h"
 #include "board.h" 
+#include "minimax.h"
 
 void step(struct gamestate *game){
 	
@@ -43,8 +44,8 @@ void step(struct gamestate *game){
 		//Accounts for the first Space in checks being stored at 0
 		//while the first choice is printed as 1.
 
-		int xval = checks[choice].x;
-		int yval = checks[choice].y;
+		xval = checks[choice].x;
+		yval = checks[choice].y;
 		//not yet compatible with kings, can fix if we don't cut kings
 		
 		//debug lines
@@ -92,6 +93,8 @@ void step(struct gamestate *game){
 	//update board with player turn then opponent turn
 	//loop until completion
 	
+	freeLinkedList(list);
+
 	//here for testing purposes only:
 	//should only execute when gameover
 	endwin();
@@ -104,11 +107,11 @@ void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int 
 	p->coords.y = y;
 
 	if (isPlayer) {
-		static p_idx = 0;
+		static int p_idx = 0;
 		b->player_pieces[p_idx] = p;
 		p_idx++;
 	} else {
-		static ai_idx = 0;
+		static int ai_idx = 0;
 		b->ai_pieces[ai_idx] = p;
 		ai_idx++;
 	}
@@ -163,6 +166,13 @@ void initGame(struct gamestate *b) {
 	}
 }
 
+void freegame(struct gamestate *game) {
+	for (int i=0; i<12; i++) {
+		free(game->player_pieces[i]);
+		free(game->ai_pieces[i]);
+	}
+}
+
 int main() {
 	initscr();
         if(has_colors() == FALSE) {
@@ -177,12 +187,12 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
-
-
 	
 	step(game); //prints board, passes gamestate
 	//depending on turn #, changes the order of player turn and opponent turn
 	
 	endwin();
+	freegame(game);
 	free(game);
+	return 0;
 }
