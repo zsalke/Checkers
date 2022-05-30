@@ -68,8 +68,6 @@ void step(struct gamestate *game){
 
 	count = 0;
 	int listint=1;
-	count++;
-
 	mvprintw(line+count, 0, "You can move this piece (%d, %d) to:", xval, yval);	
 	list = list->next; //skip sentinel node
 
