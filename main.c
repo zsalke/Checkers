@@ -29,12 +29,14 @@ struct gamestate *step(struct gamestate *game){
 		}
 	}
 	count++;
+	/*
 	for (int i=0; i<12;i++) {
 		if (game->player_pieces[i]) {
 			mvprintw(line+count, 0, "Check at (%d, %d).", game->player_pieces[i]->coords.x, game->player_pieces[i]->coords.y);
 			count++;
 		}
 	}
+	*/
 	mvprintw(line+count, 0, "%s", "Please choose a number from the list. ");
 	
 	int choice;

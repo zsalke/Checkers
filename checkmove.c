@@ -89,7 +89,7 @@ void freeMovesLists(struct MovesLists *head) {
 		buff = head->next;
 		free(head);
 		head = buff;
-	};
+	}
 	free(head);
 }	
 
@@ -143,18 +143,17 @@ void updatePieceArrays(struct gamestate *new_move) {
 	
 }
 
-void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool isking, struct LinkedList *move_list) {
+void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool isking, struct LinkedList *move_list, bool isPlayer) {
 //	printf("Print captures\n");
 	
-	int check, king, xcheck, xking;
-	if (board_struct->turn % 2 == 0) {
-		check = CHECK;
-		king = KING;
+	int xcheck, xking;
+	bool isOpp = false;
+	if (isPlayer) {
 		xcheck = XCHECK;
 		xking = XKING;
 	} else {
-		check = XCHECK;
-		king = XKING;
+		mvprintw(10, 10, "OPP CAPTURE");
+		isOpp = true;
 		xcheck = CHECK;
 		xking = KING;
 	}
@@ -168,8 +167,10 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			new_move->board[y+ydir][x-1] = 0; // remove captured piece
 			updatePieceArrays(new_move);
 			append(move_list, new_move);
+//			if (isOpp) {
+//			}
 
-			printcaptures(new_move, x-2, y+2*ydir, ydir, isking, move_list);
+			printcaptures(new_move, x-2, y+2*ydir, ydir, isking, move_list, isPlayer);
 		}
 	}
 	if ((x<6 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x+1] == xcheck) || (board_struct->board[y+ydir][x+1] == xking))) {
@@ -182,8 +183,11 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			new_move->board[y+ydir][x+1] = 0; // remove captured piece
 			updatePieceArrays(new_move);
 			append(move_list, new_move);
+//			if (isOpp) {
+//				mvprintw(0, 0, "Opponent capture");
+//			}
 
-			printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list);
+			printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list, isPlayer);
 		}
 	}
 
@@ -200,7 +204,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 				updatePieceArrays(new_move);
 				append(move_list, new_move);
 
-				printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list);
+				printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list, isPlayer);
 			}
 		}
 		if (x<6 && ((board_struct->board[y-ydir][x+1] == xcheck) || (board_struct->board[y-ydir][x+1] == xking))) {
@@ -214,7 +218,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 				updatePieceArrays(new_move);
 				append(move_list, new_move);
 
-				printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list);
+				printcaptures(new_move, x+2, y+2*ydir, ydir, isking, move_list, isPlayer);
 			}
 		}
 	}
@@ -228,16 +232,18 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 	move_list->move = NULL;
 //	printf("%p", board_struct);
 	int ydir;
-	bool isking;
+	bool isking, isPlayer;
 	int type = board_struct->board[y][x];
 
 	int check, king, xcheck, xking;
 	if (board_struct->turn % 2 == 0) {
+		isPlayer = true;
 		check = CHECK;
 		king = KING;
 		xcheck = XCHECK;
 		xking = XKING;
 	} else {
+		isPlayer = false;
 		check = XCHECK;
 		king = XKING;
 		xcheck = CHECK;
@@ -249,18 +255,26 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 //		printf("Checker\n");
 		ydir = -1;
 		isking = false;
+
+		isPlayer = true;
 	} else if (type == king) {
 //		printf("King\n");
 		ydir = -1;
 		isking = true;
+
+		isPlayer = true;
 	} else if (type == xcheck) {
 //		printf("Enemy checker\n");
 		ydir = 1;
 		isking = false;
+
+		isPlayer = false;
 	} else if (type == xking) {
 //		printf("Enemy king\n");
 		ydir = 1;
 		isking = true;
+
+		isPlayer = false;
 	} else {
 //		printf("No checker here!\n");
 		return move_list;
@@ -306,7 +320,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 		}
 	}
 
-	printcaptures(board_struct, x, y, ydir, isking, move_list);
+	printcaptures(board_struct, x, y, ydir, isking, move_list, isPlayer);
 
 	// Hacky fix for captures
 	// In order to fix the origin of moves with multiple captures, reset all prev_x and prev_y values to original x and y

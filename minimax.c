@@ -121,7 +121,7 @@ struct gamestate *findMaxGame(struct MovesLists *allpossible_moves) {
 
                         gameptr->score = calc_score(gameptr);
 
-                        if (gameptr->score < maxGame->score) {
+                        if (gameptr->score > maxGame->score) {
                                 maxGame = gameptr; //dk if work cuz &'s                 
                         }
                 }
