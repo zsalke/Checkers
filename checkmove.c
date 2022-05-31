@@ -147,18 +147,15 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 //	printf("Print captures\n");
 	
 	int xcheck, xking;
-	bool isOpp = false;
 	if (isPlayer) {
 		xcheck = XCHECK;
 		xking = XKING;
 	} else {
-		mvprintw(10, 10, "OPP CAPTURE");
-		isOpp = true;
 		xcheck = CHECK;
 		xking = KING;
 	}
 
-	if ((x>1 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x-1] == xcheck) || (board_struct->board[y+ydir][x-1] == xking))) {
+	if ((x>1 && (y+2*ydir>=0 && y+2*ydir<=7)) && ((board_struct->board[y+ydir][x-1] == xcheck) || (board_struct->board[y+ydir][x-1] == xking))) {
 		if (board_struct->board[y+2*ydir][x-2] == 0) {
 //			printf("%d, %d\n", x-2, y+2*ydir);
 			struct gamestate *new_move = malloc(sizeof(struct gamestate));
@@ -173,7 +170,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			printcaptures(new_move, x-2, y+2*ydir, ydir, isking, move_list, isPlayer);
 		}
 	}
-	if ((x<6 && (y+2*ydir>=0 && y+2*ydir<=8)) && ((board_struct->board[y+ydir][x+1] == xcheck) || (board_struct->board[y+ydir][x+1] == xking))) {
+	if ((x<6 && (y+2*ydir>=0 && y+2*ydir<=7)) && ((board_struct->board[y+ydir][x+1] == xcheck) || (board_struct->board[y+ydir][x+1] == xking))) {
 		if (board_struct->board[y+2*ydir][x+2] == 0) {
 //			printf("%d, %d\n", x+2, y+2*ydir);
 
