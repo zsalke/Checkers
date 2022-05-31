@@ -153,7 +153,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
         else {
                 struct MovesLists *allpossible_moves = getAllmoves(tmp, 1);
                 struct gamestate *maxGame = findMaxGame(allpossible_moves);
-		mvprintw(0, 0, "Address of maxGame: %p\n", maxGame);
+//		mvprintw(0, 0, "Address of maxGame: %p\n", maxGame);
                 maxGame->parent = parentGame;
                 /* NOTE: APPEND THESE GAMES TO A LINKEDLIST & RETURN IT HERE
                 *  TRAVERSE LINKEDLIST TO FIND MAX & RETURN ITS PARENT
