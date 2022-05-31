@@ -101,15 +101,8 @@ struct gamestate *step(struct gamestate *game){
 		list = list->next;
 	}
 	printboard(list->move->board);
-	//loop until completion
-	//one "step" in the game is now over, 
-	//and step() should be called again from main
-	//with the updated opponent board.
+	getch();
 	return list->move;
-	//here for testing purposes only:
-	//should only execute when gameover
-	//endwin();
-	//exit(0); 
 }
 void initGame(struct gamestate *b) {
 	(*b).turn = 0; // player go 1st for now
@@ -187,9 +180,6 @@ int main() {
 	gameAfter = step(game);
 	updatePieceArrays(gameAfter);
 	
-	//set to 1 here FOR DEBUG PURPOSES
-	//done = 1;
-
 	while(!done){
 		game = findBestMove(gameAfter);
 		printboard(game->board);
