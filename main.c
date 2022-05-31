@@ -93,7 +93,6 @@ struct gamestate *step(struct gamestate *game){
 
 	scanw("%d", &choice);
 	//do the board thing
-	getch();	
 	clear();
 	//update board with player turn then opponent turn
 	list = getmoves(game, xval, yval);
@@ -103,7 +102,6 @@ struct gamestate *step(struct gamestate *game){
 	}
 	printboard(list->move->board);
 	//loop until completion
-	getch();
 	//one "step" in the game is now over, 
 	//and step() should be called again from main
 	//with the updated opponent board.
@@ -194,7 +192,6 @@ int main() {
 
 	while(!done){
 		game = findBestMove(gameAfter);
-		printf("found!");
 		printboard(game->board);
 		gameAfter = step(game); //prints board, passes gamestate
 		updatePieceArrays(gameAfter);
