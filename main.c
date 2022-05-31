@@ -196,6 +196,11 @@ int main() {
 		game = findBestMove(gameAfter);
 		printf("found!");
 		printboard(game->board);
+		game->score = calc_score(game);
+                mvprintw(0, 50, "score: %d", game->score);
+		if (checkEnd(game)) {
+			checkWin(game);
+		}
 		gameAfter = step(game); //prints board, passes gamestate
 		updatePieceArrays(gameAfter);
 		//depending on turn #, changes the order of player turn and opponent turn

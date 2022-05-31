@@ -23,6 +23,8 @@ struct LinkedList *getmoves(struct gamestate*, int x, int y);
 struct MovesLists *getAllmoves(struct gamestate*, int);
 void freeLinkedList(struct LinkedList*);
 void freeMovesLists(struct MovesLists*);
+int checkEnd(struct gamestate *game);
+void checkWin(struct gamestate *game);
 
 
 

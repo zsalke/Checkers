@@ -362,6 +362,53 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 }
 
 
+// checks if 1 of the players has reached the end of
+// the board w/ all their pieces
+int checkEnd(struct gamestate *game) {
+	int p_idx = 0;
+	int num_playerpieces = 0;
+        int pp_at_end = 0;
+	while (game->player_pieces[p_idx]) {
+		num_playerpieces++;
+		if (game->player_pieces[p_idx]->coords.y == 0) {
+			pp_at_end++;
+		}
+		p_idx++;
+	}
+	
+	int ai_idx = 0;
+	int num_aipieces = 0;
+	int ai_at_end = 0;
+        while(game->ai_pieces[ai_idx]) {
+                num_aipieces++;
+                if (game->ai_pieces[ai_idx]->coords.y == 7) { 
+			ai_at_end++;
+                } 
+		ai_idx++;
+        }
+	
+
+	if (num_playerpieces == pp_at_end || num_aipieces == ai_at_end) {
+		return 1;
+	}
+	return 0;
+}
+
+// returns who won when checkEnd
+void checkWin(struct gamestate *game) {
+	if (game->score == 0) {
+		mvprintw(10, 50, "Tie!");
+	}
+	else if (game->score > 0) {
+		mvprintw(10, 50, "You win!");
+	}
+	else {
+		mvprintw(10, 50, "You lose!");
+	}
+}
+
+
+
 /*
 int main() {
 
