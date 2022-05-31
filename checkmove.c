@@ -25,25 +25,30 @@ struct LinkedList {
 //	struct LinkedList *list;
 //	struct MovesLists *next;
 //};
+//
+
 
 // List operations
-//
-//
 //
 
 void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer) {
 	p->value = val;
 	p->coords.x = x; 
 	p->coords.y = y;
-
+	
 	if (isPlayer) {
-		static int p_idx = 0;
+		int p_idx = 0;
+		while (b->player_pieces[p_idx]) {
+			p_idx++;
+		}
+
 		b->player_pieces[p_idx] = p;
-		p_idx++;
 	} else {
-		static int ai_idx = 0;
+		int ai_idx = 0;
+		while(b->ai_pieces[ai_idx]) {
+			ai_idx++;
+		}
 		b->ai_pieces[ai_idx] = p;
-		ai_idx++;
 	}
 }
 
@@ -100,8 +105,25 @@ void setmove(struct gamestate *move, int prev_x, int prev_y, int curr_x, int cur
 			move->prev_y = prev_y;
 }
 
+
 // goes thru board & update piece arrays
 void updatePieceArrays(struct gamestate *new_move) {
+
+	// Free arrays before updating
+	
+	for (int i=0; i<12; i++) {
+		if (new_move->player_pieces[i]) {
+			free(new_move->player_pieces[i]);
+		}
+		if (new_move->ai_pieces[i]) {
+			free(new_move->ai_pieces[i]);
+		}
+
+		new_move->player_pieces[i] = NULL;
+		new_move->ai_pieces[i] = NULL;
+	}
+
+
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			if (new_move->board[i][j] != EMPTY) {
@@ -117,6 +139,7 @@ void updatePieceArrays(struct gamestate *new_move) {
 			}
 		}
 	}
+	
 }
 
 void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool isking, struct LinkedList *move_list) {

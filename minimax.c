@@ -17,13 +17,13 @@ int calc_score(struct gamestate *game) {
 	int num_playerpieces = 0;
 	int num_aipieces = 0;
 	for (int i = 0; i < 12; i++) {
-		if (game->player_pieces[i]->value != EMPTY) {
+		if (game->player_pieces[i]) {
 			num_playerpieces++;
 			if (game->player_pieces[i]->value == KING) {
 				num_playerpieces++; // extra pt for kings
 			}
 		}
-		if (game->ai_pieces[i]->value != EMPTY) {
+		if (game->ai_pieces[i]) {
                         num_aipieces++;
 			if (game->ai_pieces[i]->value == XKING) {
                                 num_aipieces++; // extra pt for kings
@@ -39,7 +39,9 @@ int calc_score(struct gamestate *game) {
 struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
 	
 	if (!allpossible_moves->next) {
-		return NULL; // No moves possible
+		mvprintw(0, 0, "No possible moves\n");
+		endwin();
+		exit(2);
 	}
 
 	struct gamestate *minGame;
@@ -49,7 +51,7 @@ struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
 	while (buffer->next) {
 		buffer = buffer->next;
 		if (buffer->list->next) {
-			minGame = buffer->list->next;
+			minGame = buffer->list->next->move;
 		}
 	}
 
@@ -58,8 +60,10 @@ struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
 	while (allpossible_moves->next) {
 
 		allpossible_moves = allpossible_moves->next;
-
-		struct LinkedList *piece_moves = allpossible_moves->list;
+		struct LinkedList *piece_moves;
+		if (allpossible_moves->list) {
+			piece_moves = allpossible_moves->list;
+		}
 		
 		while (piece_moves->next) {
 			piece_moves = piece_moves->next;
@@ -77,14 +81,16 @@ struct gamestate *findMinGame(struct MovesLists *allpossible_moves) {
 			}
 		}
 	}
-
+	
 	return minGame;
 }
 
 struct gamestate *findMaxGame(struct MovesLists *allpossible_moves) {
 	
 	if (!allpossible_moves->next) {
-		return NULL; // No moves possible
+		mvprintw(0, 0, "%s\n", "No possible moves\n");
+		endwin();
+		exit(2);
 	}
 
 	struct gamestate *maxGame;
@@ -94,7 +100,7 @@ struct gamestate *findMaxGame(struct MovesLists *allpossible_moves) {
 	while (buffer->next) {
 		buffer = buffer->next;
 		if (buffer->list->next) {
-			maxGame = buffer->list->next;
+			maxGame = buffer->list->next->move;
 		}
 	}
 
@@ -137,6 +143,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
         if (tmp->turn % 2 == 0) {
                 struct MovesLists *allpossible_moves = getAllmoves(tmp, 2);
 	        struct gamestate *minGame = findMinGame(allpossible_moves);
+
                 minGame->turn = 1;
 
                 findPossibleScores(parentGame, minGame, depth3scores);

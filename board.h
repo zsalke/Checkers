@@ -31,7 +31,6 @@ struct gamestate {
 	int prev_y;
 	int curr_x;
 	int curr_y;
-
 	struct Piece *player_pieces[12]; // starts w/ 12
 	struct Piece *ai_pieces[12];
 	struct gamestate *parent; // for AI predicting move purposes
