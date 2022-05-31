@@ -69,7 +69,7 @@ void checkWin(struct gamestate *game) {
 		endwin();
 		exit(0);
 	}
-	else if (game->score > 0) {
+	else if (game->score < 0) {
 		mvprintw(10, 50, "You win!");
 		getch();
 		endwin();
@@ -427,25 +427,11 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 		}
 	}
 
-<<<<<<< HEAD
 	if (hasmove == false) {
 		checkWin(game);
 	}	
 */
 	return allmoves;
-=======
-// returns who won when checkEnd
-void checkWin(struct gamestate *game) {
-	if (game->score == 0) {
-		mvprintw(10, 50, "Tie!");
-	}
-	else if (game->score < 0) {
-		mvprintw(10, 50, "You win!");
-	}
-	else {
-		mvprintw(10, 50, "You lose!");
-	}
->>>>>>> 51c9da8532747285df962616c76ffd7e622713c1
 }
 
 /*
