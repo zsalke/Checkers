@@ -132,10 +132,10 @@ void updatePieceArrays(struct gamestate *new_move) {
 				
 				// AI's piece
 				if (new_move->board[i][j] == 3 || new_move->board[i][j] == 4) {
-					initPiece(p, new_move, new_move->board[i][j], i, j, 0);
+					initPiece(p, new_move, new_move->board[i][j], j, i, 0);
 				}
 				else if (new_move->board[i][j] == 1 || new_move->board[i][j] == 2) { // player's piece
-					initPiece(p, new_move, new_move->board[i][j], i, j, 1);
+					initPiece(p, new_move, new_move->board[i][j], j, i, 1);
 				}
 			}
 		}
@@ -168,7 +168,7 @@ void printcaptures(struct gamestate *board_struct, int x, int y, int ydir, bool 
 			new_move->board[y+ydir][x-1] = 0; // remove captured piece
 			updatePieceArrays(new_move);
 			append(move_list, new_move);
-			
+
 			printcaptures(new_move, x-2, y+2*ydir, ydir, isking, move_list);
 		}
 	}
@@ -327,7 +327,7 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 	allmoves->next = NULL;
         allmoves->list = NULL;
 
-	if (isPlayer == 1) { // player's turn
+	if (isPlayer == 0) { // player's turn
 		for (int i = 0; i < 12; i++) {
 			struct Piece *p = game->player_pieces[i];
 			if (p) {
@@ -342,7 +342,7 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 
                         	struct Piece *p = game->ai_pieces[i];
                                 struct LinkedList *piecemoves = getmoves(game, p->coords.x, p->coords.y); // possible moves for 1 piece
-                                appendList(allmoves, piecemoves);
+				appendList(allmoves, piecemoves);
                         }
                 }
 	}

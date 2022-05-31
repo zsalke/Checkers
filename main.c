@@ -29,6 +29,12 @@ struct gamestate *step(struct gamestate *game){
 		}
 	}
 	count++;
+	for (int i=0; i<12;i++) {
+		if (game->player_pieces[i]) {
+			mvprintw(line+count, 0, "Check at (%d, %d).", game->player_pieces[i]->coords.x, game->player_pieces[i]->coords.y);
+			count++;
+		}
+	}
 	mvprintw(line+count, 0, "%s", "Please choose a number from the list. ");
 	
 	int choice;
@@ -189,6 +195,7 @@ int main() {
 		printf("found!");
 		printboard(game->board);
 		gameAfter = step(game); //prints board, passes gamestate
+		updatePieceArrays(gameAfter);
 		//depending on turn #, changes the order of player turn and opponent turn
 	}
 
