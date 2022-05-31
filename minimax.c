@@ -195,10 +195,7 @@ struct gamestate *findBestMove(struct gamestate *curr) {
 		}
 	}
 	if (!depth3scores->next) {
-		mvprintw(4, 4, "You win!");
-		getch();
-		endwin();
-		exit(0);
+		checkWin(curr);
 	}
 
 	// traverse thru depth3scores & return its parent

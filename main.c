@@ -10,7 +10,7 @@ struct gamestate *step(struct gamestate *game){
 	int count = 0;
 	//The maximum checkers you can have is 12.
 	struct Space checks[12];
-	struct Space kings[12];
+//	struct Space kings[12];
 	mvprintw(line, 0, "%s", "What would you like to move?");
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++){
@@ -21,8 +21,8 @@ struct gamestate *step(struct gamestate *game){
 				count++;
 				mvprintw(line+count, 0, "%d. Check at (%d, %d).", count, j, i);
 			} else if (game->board[i][j] == KING) {
-				struct Space king = { j, i };
-				kings[count] = king;	
+//				struct Space king = { j, i };
+//				kings[count] = king;	
 				count++;
 				mvprintw(line+count, 0, "%d. King at (%d, %d).", count, j, i);
 			}
