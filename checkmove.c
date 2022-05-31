@@ -399,7 +399,7 @@ void checkWin(struct gamestate *game) {
 	if (game->score == 0) {
 		mvprintw(10, 50, "Tie!");
 	}
-	else if (game->score > 0) {
+	else if (game->score < 0) {
 		mvprintw(10, 50, "You win!");
 	}
 	else {
