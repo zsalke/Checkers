@@ -176,8 +176,10 @@ int main() {
 	// will be initialized to default checkerboard
 	
 	initGame(game);
+	updatePieceArrays(game);
 	struct gamestate *gameAfter;
 	gameAfter = step(game);
+	updatePieceArrays(gameAfter);
 	
 	//set to 1 here FOR DEBUG PURPOSES
 	//done = 1;

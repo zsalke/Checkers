@@ -112,13 +112,14 @@ void updatePieceArrays(struct gamestate *new_move) {
 	// Free arrays before updating
 	
 	for (int i=0; i<12; i++) {
+		/*
 		if (new_move->player_pieces[i]) {
 			free(new_move->player_pieces[i]);
 		}
 		if (new_move->ai_pieces[i]) {
 			free(new_move->ai_pieces[i]);
 		}
-
+*/
 		new_move->player_pieces[i] = NULL;
 		new_move->ai_pieces[i] = NULL;
 	}
@@ -133,9 +134,9 @@ void updatePieceArrays(struct gamestate *new_move) {
 				if (new_move->board[i][j] == 3 || new_move->board[i][j] == 4) {
 					initPiece(p, new_move, new_move->board[i][j], i, j, 0);
 				}
-				else { // player's piece
+				else if (new_move->board[i][j] == 1 || new_move->board[i][j] == 2) { // player's piece
 					initPiece(p, new_move, new_move->board[i][j], i, j, 1);
-				}	
+				}
 			}
 		}
 	}
@@ -337,8 +338,9 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 	}
 	else { // isAI
 		for (int i = 0; i < 12; i++) {
-                        struct Piece *p = game->ai_pieces[i];
-                        if (p) {
+                        if (game->ai_pieces[i]) {
+
+                        	struct Piece *p = game->ai_pieces[i];
                                 struct LinkedList *piecemoves = getmoves(game, p->coords.x, p->coords.y); // possible moves for 1 piece
                                 appendList(allmoves, piecemoves);
                         }
