@@ -194,6 +194,12 @@ struct gamestate *findBestMove(struct gamestate *curr) {
 
 		}
 	}
+	if (!depth3scores->next) {
+		mvprintw(4, 4, "You win!");
+		getch();
+		endwin();
+		exit(0);
+	}
 
 	// traverse thru depth3scores & return its parent
 	struct gamestate *bestMove = depth3scores->next->move;

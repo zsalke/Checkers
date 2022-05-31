@@ -28,6 +28,64 @@ struct LinkedList {
 //
 
 
+
+// checks if 1 of the players has reached the end of
+// the board w/ all their pieces
+int checkEnd(struct gamestate *game) {
+	int p_idx = 0;
+	int num_playerpieces = 0;
+        int pp_at_end = 0;
+	while (game->player_pieces[p_idx]) {
+		num_playerpieces++;
+		if (game->player_pieces[p_idx]->coords.y == 0) {
+			pp_at_end++;
+		}
+		p_idx++;
+	}
+	
+	int ai_idx = 0;
+	int num_aipieces = 0;
+	int ai_at_end = 0;
+        while(game->ai_pieces[ai_idx]) {
+                num_aipieces++;
+                if (game->ai_pieces[ai_idx]->coords.y == 7) { 
+			ai_at_end++;
+                } 
+		ai_idx++;
+        }
+	
+
+	if (num_playerpieces == pp_at_end || num_aipieces == ai_at_end) {
+		return 1;
+	}
+	return 0;
+}
+
+// returns who won when checkEnd
+void checkWin(struct gamestate *game) {
+	if (game->score == 0) {
+		mvprintw(10, 50, "Tie!");
+		getch();
+		endwin();
+		exit(0);
+	}
+	else if (game->score > 0) {
+		mvprintw(10, 50, "You win!");
+		getch();
+		endwin();
+		exit(0);
+	}
+	else {
+		mvprintw(10, 50, "You lose!");
+		getch();
+		endwin();
+		exit(0);
+	}
+}
+
+
+
+
 // List operations
 //
 
@@ -334,6 +392,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 // returns a LinkedList of LinkedLists of all possible moves
 // based on the given player (pass in gamestate->turn % 2)
 struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
+
 	struct MovesLists *allmoves = malloc(sizeof(struct MovesLists));
 	allmoves->next = NULL;
         allmoves->list = NULL;
@@ -357,57 +416,23 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
                         }
                 }
 	}
+/*
+	bool hasmove = false;
+	struct MovesLists *iterator = allmoves;
 
+	while (iterator->next) {
+		iterator = iterator->next;
+		if (iterator->list->next) {
+			hasmove = true;
+		}
+	}
+
+	if (hasmove == false) {
+		checkWin(game);
+	}	
+*/
 	return allmoves;
 }
-
-
-// checks if 1 of the players has reached the end of
-// the board w/ all their pieces
-int checkEnd(struct gamestate *game) {
-	int p_idx = 0;
-	int num_playerpieces = 0;
-        int pp_at_end = 0;
-	while (game->player_pieces[p_idx]) {
-		num_playerpieces++;
-		if (game->player_pieces[p_idx]->coords.y == 0) {
-			pp_at_end++;
-		}
-		p_idx++;
-	}
-	
-	int ai_idx = 0;
-	int num_aipieces = 0;
-	int ai_at_end = 0;
-        while(game->ai_pieces[ai_idx]) {
-                num_aipieces++;
-                if (game->ai_pieces[ai_idx]->coords.y == 7) { 
-			ai_at_end++;
-                } 
-		ai_idx++;
-        }
-	
-
-	if (num_playerpieces == pp_at_end || num_aipieces == ai_at_end) {
-		return 1;
-	}
-	return 0;
-}
-
-// returns who won when checkEnd
-void checkWin(struct gamestate *game) {
-	if (game->score == 0) {
-		mvprintw(10, 50, "Tie!");
-	}
-	else if (game->score > 0) {
-		mvprintw(10, 50, "You win!");
-	}
-	else {
-		mvprintw(10, 50, "You lose!");
-	}
-}
-
-
 
 /*
 int main() {

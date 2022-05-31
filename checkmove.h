@@ -13,6 +13,7 @@ struct LinkedList {
 struct MovesLists;
 */
 
+void checkWin(struct gamestate*);
 void initPiece(struct Piece *p, struct gamestate *b, int val, int x, int y, int isPlayer);
 void append(struct LinkedList*, struct gamestate*);
 void appendMovesLists(struct MovesLists, struct LinkedList);
