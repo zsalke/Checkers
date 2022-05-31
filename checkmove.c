@@ -285,7 +285,7 @@ struct LinkedList *getmoves(struct gamestate *board_struct, int x, int y) {
 		}
 	}
 	
-	if (king) {
+	if (isking) {
 		if (((y-ydir) >= 0) && ((y-ydir) <= 7)) {
 			if ((x > 0) && (board_struct->board[y-ydir][x-1] == 0)) {
 //				printf("%d, %d\n", x-1, y-ydir);
@@ -327,7 +327,7 @@ struct MovesLists *getAllmoves(struct gamestate *game, int isPlayer) {
 	allmoves->next = NULL;
         allmoves->list = NULL;
 
-	if (isPlayer == 0) { // player's turn
+	if (isPlayer == 1) { // player's turn
 		for (int i = 0; i < 12; i++) {
 			struct Piece *p = game->player_pieces[i];
 			if (p) {

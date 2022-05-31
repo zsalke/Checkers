@@ -141,7 +141,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
 
         // player's turn (this visited 1st)
         if (tmp->turn % 2 == 0) {
-                struct MovesLists *allpossible_moves = getAllmoves(tmp, 2);
+                struct MovesLists *allpossible_moves = getAllmoves(tmp, 1);
 	        struct gamestate *minGame = findMinGame(allpossible_moves);
 
                 minGame->turn = 1;
@@ -151,7 +151,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
 
         // AI's turn & we've reached game tree depth of 3
         else {
-                struct MovesLists *allpossible_moves = getAllmoves(tmp, 1);
+                struct MovesLists *allpossible_moves = getAllmoves(tmp, 0);
                 struct gamestate *maxGame = findMaxGame(allpossible_moves);
 //		mvprintw(0, 0, "Address of maxGame: %p\n", maxGame);
                 maxGame->parent = parentGame;
@@ -169,7 +169,7 @@ void findPossibleScores(struct gamestate *parentGame, struct gamestate *tmp, str
 
 // return init_possible_moves[best] (depth 1)
 struct gamestate *findBestMove(struct gamestate *curr) {
-	struct MovesLists *init_allpossible_moves = getAllmoves(curr, 1);
+	struct MovesLists *init_allpossible_moves = getAllmoves(curr, 0);
 	struct LinkedList *depth3scores = malloc(sizeof(struct LinkedList*));
         depth3scores->next = NULL;
         depth3scores->move = NULL;
